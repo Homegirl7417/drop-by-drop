@@ -1,26 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
+    const [currentRoute, setCurrentRoute] = useState(0);
+    const { pathname } = useLocation();
     const navigation = [
-        {
+        {   
+            index: 0,
             title: '등록된 일거리',
             path: '/'
         },
         {
+            index: 1,
             title: '일거리 등록',
             path: '/register/work'
         },
         {
+            index: 2,
             title: '진행 작업 관리',
             path: '/manage/work'
         },
         {
+            index: 3,
             title: '고객문의',
             func: () => alert('티끌 시스템 및 서비스 이용에 관련해서 문의사항이 있으신가요?\n문의사항은 hk7417@ajou.ac.kr로 부탁드립니다.')
         }
     ];
+    useEffect(() => {
+        const detectIndex = (path) => {
+            let currentIndex = 0;
+            switch (path){
+                case '/': 
+                    currentIndex = 0
+                    break; 
+                case '/register/work':
+                    currentIndex = 1;
+                    break;
+                case '/manage/work':
+                    currentIndex = 2;
+                    break;
+                default:
+                    currentIndex = 100;
+                    break; 
+            }
+            setCurrentRoute(currentIndex);
+        }
+        detectIndex(pathname);
+    }, []);
     return (
         <HeaderContainer>
             <LogoSection>
@@ -38,6 +65,8 @@ const Header = () => {
                         : <NavigationItem>
                             <NavigationTitle
                                 to={item.path}
+                                index={item.index}
+                                current={currentRoute}
                             >
                                 {item.title}
                             </NavigationTitle>
@@ -107,4 +136,6 @@ const NavigationAlert = styled.div`
 const NavigationTitle = styled(Link)`
     font-size: 18px;
     cursor: pointer;
+    border-bottom: ${props => props.index === props.current ? '3px solid orange' : 'none'};
+    color: ${props => props.index === props.current ? 'orange' : 'black'};
 `
