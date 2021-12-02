@@ -1,12 +1,12 @@
 import React from 'react';
 import Template from '../component/Template';
 
-const HomeScreen = () => {
+const LoginScreen = () => {
     return (
         <Template>
-            메인 페이지
+            로그인 페이지
         </Template>
     );
 }
 
-export default HomeScreen;
+export default LoginScreen;

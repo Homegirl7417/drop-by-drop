@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
     const navigation = [
@@ -17,27 +18,37 @@ const Header = () => {
         },
         {
             title: '고객문의',
-            path: '/service/customer'
+            func: () => alert('티끌 시스템 및 서비스 이용에 관련해서 문의사항이 있으신가요?\n문의사항은 hk7417@ajou.ac.kr로 부탁드립니다.')
         }
-    ]
+    ];
     return (
         <HeaderContainer>
             <LogoSection>
-                티끌
+                <LogoTitle>
+                    티끌
+                </LogoTitle>
             </LogoSection>
             <NavigationSection>
                 {
                     navigation.map(item => 
-                        <NavigationItem>
-                            <NavigationTitle>
+                        item.title === '고객문의'
+                        ?  <NavigationAlert onClick={item.func}>
+                            {item.title}
+                        </NavigationAlert>
+                        : <NavigationItem>
+                            <NavigationTitle
+                                to={item.path}
+                            >
                                 {item.title}
                             </NavigationTitle>
                         </NavigationItem>
                     )
-                }    
+                }   
             </NavigationSection>
             <LoginSection>
-                <Login>
+                <Login
+                    to='/login'
+                >
                     로그인
                 </Login>
             </LoginSection>
@@ -54,38 +65,46 @@ const HeaderContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 10px 20px;
+    padding: 20px 20px;
 `
 
-const LogoSection = styled.div`
-    font-size: 48px;
+const LogoSection = styled.div``
+
+const LogoTitle = styled.span`
+    font-size: 36px;
     color: orange;
 `
 
 const LoginSection = styled.div``
 
-const Login = styled.div`
+const Login = styled(Link)`
+    display: block;
     background-color: orange;
     color: white;
     font-size: 14px;
     text-align: center;
-    width: 120px;
-    height: 40px;
-    line-height: 40px;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
     border-radius: 20px;
     cursor: pointer;
 `
 
 const NavigationSection = styled.div`
     display: flex;
-    margin: 10px 50px;
+    margin: 0px 50px;
 `
 
 const NavigationItem = styled.div`
     width: 150px;
 `
 
-const NavigationTitle = styled.span`
+const NavigationAlert = styled.div`
+    font-size: 18px;
+    cursor: pointer;
+`
+
+const NavigationTitle = styled(Link)`
     font-size: 18px;
     cursor: pointer;
 `
