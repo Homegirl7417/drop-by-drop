@@ -32,7 +32,7 @@ const Header = () => {
             let currentIndex = 0;
             switch (path){
                 case '/': 
-                    currentIndex = 0
+                    currentIndex = 0;
                     break; 
                 case '/register/work':
                     currentIndex = 1;
