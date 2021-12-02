@@ -1,10 +1,15 @@
 import React from 'react';
 import Template from '../component/Template';
+import WorkTemplate from '../component/WorkTemplate';
 
 const RegisterScreen = () => {
     return (
         <Template>
-            일거리 등록
+            <WorkTemplate
+                title="일거리 등록"
+            >
+                <div>Hell</div>
+            </WorkTemplate>
         </Template>
     );
 }
