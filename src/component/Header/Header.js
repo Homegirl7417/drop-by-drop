@@ -5,7 +5,9 @@ import { Link, useLocation } from 'react-router-dom';
 const Header = () => {
     const [currentRoute, setCurrentRoute] = useState(0);
     const [path, setPath] = useState('/'); 
-    setPath(useLocation().pathname);
+    // const { pathname } = useLocation();
+    // console.log("hell" + pathname);
+    // setPath(pathname);
     const navigation = [
         {   
             index: 0,
@@ -29,26 +31,28 @@ const Header = () => {
         }
     ];
     useEffect(() => {
-        const detectIndex = (path) => {
-            let currentIndex = 0;
-            switch (path){
-                case '/': 
-                    currentIndex = 0;
-                    break; 
-                case '/register/work':
-                    currentIndex = 1;
-                    break;
-                case '/manage/work':
-                    currentIndex = 2;
-                    break;
-                default:
-                    currentIndex = 100;
-                    break; 
-            }
-            setCurrentRoute(currentIndex);
-        }
-        detectIndex(path);
-    }, [path]);
+        // console.log('hi2222'+path);
+        // const detectIndex = (index) => {
+        //     let currentIndex = 0;
+        //     switch (index){
+        //         case '/': 
+        //             currentIndex = 0;
+        //             break; 
+        //         case '/register/work':
+        //             currentIndex = 1;
+        //             break;
+        //         case '/manage/work':
+        //             currentIndex = 2;
+        //             break;
+        //         default:
+        //             currentIndex = 100;
+        //             break; 
+        //     }
+        //     setCurrentRoute(currentIndex);
+        // }
+        // console.log('hi2222'+path);
+        // detectIndex(path);
+    }, []);
     return (
         <HeaderContainer>
             <LogoSection>
@@ -135,9 +139,9 @@ const NavigationAlert = styled.div`
     cursor: pointer;
 `
 
+// border-bottom: ${props => props.index === props.current ? '3px solid orange' : 'none'};
+// color: ${props => props.index === props.current ? 'orange' : 'black'};
 const NavigationTitle = styled(Link)`
     font-size: 18px;
     cursor: pointer;
-    border-bottom: ${props => props.index === props.current ? '3px solid orange' : 'none'};
-    color: ${props => props.index === props.current ? 'orange' : 'black'};
 `
