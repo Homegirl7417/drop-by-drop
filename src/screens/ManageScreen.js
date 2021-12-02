@@ -1,11 +1,12 @@
 import React from 'react';
 import Template from '../component/Template';
 
-const HomeScreen = () => {
+const ManageScreen = () => {
     return (
         <Template>
+            진행 작업 관리
         </Template>
     );
 }
 
-export default HomeScreen;
+export default ManageScreen;
