@@ -129,6 +129,7 @@ const NavigationItem = styled.div`
 `
 
 const NavigationAlert = styled.div`
+    width: 150px;
     font-size: 18px;
     cursor: pointer;
 `
