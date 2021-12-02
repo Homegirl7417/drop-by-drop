@@ -48,7 +48,7 @@ const RegisterScreen = () => {
             // 전체 목록 페이지로 이동 추가
         } else {
             console.log("step4")
-            alert('작업 양식에 맞지 않은 정보가 있습니다. 다시 확인부탁드립니다.');
+            alert('작업이 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주시길 바랍니다.');
         }
     }
     return (

@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const WorkTemplate = ({title, children}) => {
+const WorkTemplate = ({title, children, isBorder=true}) => {
     return (
         <Container>
             <Title>
                 {title}
             </Title>
-            <WorkForm>
+            <WorkForm isBorder={isBorder}>
                 {children}
             </WorkForm>
         </Container>
@@ -31,6 +31,6 @@ const WorkForm = styled.div`
     width: 800px;
     margin: 50px 20px;
     padding: 30px;
-    border: 1px solid gray;
+    border: ${props => props.isBorder ? '1px solid gray' : 'none'};
     border-radius: 10px;
 `

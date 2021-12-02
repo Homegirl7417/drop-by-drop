@@ -22,7 +22,8 @@ const Header = () => {
         {
             index: 2,
             title: '진행 작업 관리',
-            path: '/manage/work'
+            path: '/manage/work',
+            func: () => alert('시스템 준비중입니다.')
         },
         {
             index: 3,
@@ -63,7 +64,7 @@ const Header = () => {
             <NavigationSection>
                 {
                     navigation.map(item => 
-                        item.title === '고객문의'
+                        item.title === '고객문의' || item.title === '진행 작업 관리' 
                         ?  <NavigationAlert onClick={item.func}>
                             {item.title}
                         </NavigationAlert>
