@@ -4,7 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
     const [currentRoute, setCurrentRoute] = useState(0);
-    const { pathname } = useLocation();
+    const [path, setPath] = useState('/'); 
+    setPath(useLocation().pathname);
     const navigation = [
         {   
             index: 0,
@@ -46,8 +47,8 @@ const Header = () => {
             }
             setCurrentRoute(currentIndex);
         }
-        detectIndex(pathname);
-    }, []);
+        detectIndex(path);
+    }, [path]);
     return (
         <HeaderContainer>
             <LogoSection>
