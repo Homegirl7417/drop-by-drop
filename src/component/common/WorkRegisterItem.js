@@ -13,12 +13,15 @@ const CategoryList = ({onChange, category}) => {
         </CategorySection>
     );
 }
-const WorkRegisterItem = ({title, description, kind = 'text', onChange, category, placeholder}) => {
+const WorkRegisterItem = ({isTitle=true, title, description, kind = 'text', onChange, category, placeholder}) => {
     return (
         <Container>
-            <Title>
-                {title}
-            </Title>
+            {
+                isTitle && 
+                <Title>
+                    {title}
+                </Title>
+            }
             {
                 kind === 'category'
                 ? <CategoryList
