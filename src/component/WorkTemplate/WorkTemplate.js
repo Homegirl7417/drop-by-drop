@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const WorkTemplate = ({title, children, isBorder=true}) => {
+const WorkTemplate = ({title, children, isBorder=true, isLoggedIn=false, userId=''}) => {
+    console.log('hello'+ isLoggedIn + userId);
     return (
         <Container>
             <Title>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Template from '../component/Template';
 import WorkListItem from '../component/common/WorkListItem';
@@ -6,6 +7,10 @@ import getAllWorkList from '../api/getAllWorkList';
 import WorkTemplate from '../component/WorkTemplate';
 
 const HomeScreen = () => {
+    const isLoggedIn = useSelector((store) => store.isLoggedIn);
+    const userId = useSelector((store) => store.id);
+    const store = useSelector((store) => store);
+    console.log('ooo'+JSON.stringify(store));
     const searchCategoryName = (input) => {
         let currentCategory = '기타';
         switch (input){
@@ -108,6 +113,8 @@ const HomeScreen = () => {
             <WorkTemplate
                 title="등록된 일거리"
                 isBorder={false}
+                isLoggedIn={isLoggedIn}
+                userId={userId}
             >
                 <ListGrid>
                     {/* {

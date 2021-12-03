@@ -24,7 +24,7 @@ const LoginScreen = ({ history }) => {
     const handleLogin = () => {
         if (id === 'employer1234' && password === 'dkwneo1234') {
             try {
-                dispatch(userAction.login('employer1234'));
+                dispatch(userAction.login(id));
             } catch(e) {
                 alert('로그인 중 오류가 발생했습니다.\n다시 로그인해주시기 바랍니다.');
             }
@@ -34,7 +34,7 @@ const LoginScreen = ({ history }) => {
         }
         else if (id === 'employee1234' && password === 'dkwneo1234') {
             try {
-                dispatch(userAction.login('employee1234'));
+                dispatch(userAction.login(id));
             } catch(e) {
                 alert('로그인 중 오류가 발생했습니다.\n다시 로그인해주시기 바랍니다.');
             }
