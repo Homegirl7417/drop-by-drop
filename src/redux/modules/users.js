@@ -16,15 +16,46 @@ function logOut() {
     };
 }
 
-function login(id) {
+function login(id, password) {
     return dispatch => {
-        dispatch(setLogIn(id));
-    };
+        return fetch(
+          `http://3.139.42.82:8081/login`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id,
+              pw: password,
+            }),
+          }
+        ).then(res => {
+            if (res.status === 200) {
+              dispatch(setLogIn(id));
+              return true;
+            } else {
+              return false;
+            }
+        })
+    }
 }
   
 function logout() {
     return dispatch => {
-        dispatch(logOut());
+        return fetch(
+          `http://3.139.42.82:8081/logout`,
+          {
+            method: 'GET'
+          }
+        ).then(res => {
+            if (res.status === 200) {
+              dispatch(logOut());
+              return true;
+            } else {
+              return false;
+            }
+        })
     }
 }
 

@@ -17,7 +17,8 @@ const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
         {
             index: 1,
             title: '일거리 등록',
-            path: '/register/work'
+            path: '/register/work',
+            func: () => alert('일거리 등록은 Employer만 이용할 수 있습니다.\nEmployer로 로그인 후 이용해주세요')
         },
         {
             index: 2,
@@ -68,7 +69,11 @@ const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
                         ?  <NavigationAlert onClick={item.func}>
                             {item.title}
                         </NavigationAlert>
-                        : <NavigationItem>
+                        : item.title === '일거리 등록' && userId !== 'employer1234'
+                          ? <NavigationAlert onClick={item.func}>
+                              {item.title}
+                          </NavigationAlert>
+                          : <NavigationItem>
                             <NavigationTitle
                                 to={item.path}
                                 index={item.index}
@@ -77,13 +82,14 @@ const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
                                 {item.title}
                             </NavigationTitle>
                         </NavigationItem>
+                        
                     )
                 }   
             </NavigationSection>
-            <LoginSection isLoggedIn={isLoggedIn}>
+            <LoginSection isLoggedIn={isLoggedIn} onClick={handleLogout}>
                 {
                     isLoggedIn
-                    ? <userIdLogin onClick={handleLogout}>
+                    ? <userIdLogin>
                         {userId}님 | 로그아웃
                     </userIdLogin>
                     : <Login to='/login'>
@@ -128,7 +134,7 @@ const LoginSection = styled.div`
 
 const userIdLogin = styled.div``
 
-const Login = styled(Link)``
+const Login = styled.div``
 
 const NavigationSection = styled.div`
     display: flex;

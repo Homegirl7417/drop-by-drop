@@ -1,11 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Template from '../component/Template';
 import WorkTemplate from '../component/WorkTemplate';
 import WorkRegisterItem from '../component/common/WorkRegisterItem';
 import styled from 'styled-components';
 import postWorkForm from '../api/postWorkForm';
+import { actionCreators as userAction } from "../redux/modules/users";
 
 const RegisterScreen = () => {
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector((store) => store.users.isLoggedIn);
+    const userId = useSelector((store) => store.users.id);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState(0);
@@ -40,7 +45,7 @@ const RegisterScreen = () => {
     };
     const registerForm = async () => {
         console.log("step1")
-        const result = await postWorkForm(title, description, pay, category, dueDate);
+        const result = await postWorkForm(title, description, pay*1, category, dueDate);
         console.log("step2")
         if (result) {
             console.log("step3")
@@ -51,8 +56,28 @@ const RegisterScreen = () => {
             alert('작업이 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주시길 바랍니다.');
         }
     }
+    const handleLogout = async () => {
+        try {
+            await dispatch(userAction.logout());
+            window.history.pushState('', '', '/');
+            window.location.reload();
+            alert('로그아웃 되었습니다.')
+        } catch(e) {
+            alert('로그아웃 중 오류가 발생했습니다. 화면을 종료 후 다시 실행해주세요.')
+        }
+    }
+    useEffect(() => {
+        const id = sessionStorage.getItem('id');
+        if (id) {
+            dispatch(userAction.isLogin(id));
+        }
+    }, []);
     return (
-        <Template>
+        <Template
+            isLoggedIn={isLoggedIn}
+            userId={userId}
+            handleLogout={handleLogout}
+        >
             <WorkTemplate
                 title="일거리 등록"
             >

@@ -6,6 +6,7 @@ import WorkListItem from '../component/common/WorkListItem';
 import getAllWorkList from '../api/getAllWorkList';
 import WorkTemplate from '../component/WorkTemplate';
 import { actionCreators as userAction } from "../redux/modules/users";
+import putRequestWork from '../api/putRequestWork';
 
 const HomeScreen = () => {
     const dispatch = useDispatch();
@@ -85,40 +86,57 @@ const HomeScreen = () => {
             category: 0
         },
     ]);
-    const applyWork = () => {
-        if(window.confirm('해당 작업을 신청하시겠습니까?') === true) {
-            alert("작업이 신청되었습니다.")
+    const requestWork = async (workID) => {
+        console.log("step1")
+        const result = await putRequestWork(workID);
+        console.log("step2")
+        if (result) {
+            console.log("step3")
+            alert('작업이 신청되었습니다.');
+        } else {
+            console.log("step4")
+            alert('작업 신청 중 오류가 발생했습니다. \n잠시 후 다시 시도해주시기 바랍니다.');
         }
     }
-    // useEffect(() => {
-    //     const getAllList = async () => {
-    //         console.log("step1")
-    //         const result = await getAllWorkList();
-    //         console.log("step2")
-    //         if (result) {
-    //             console.log("step3")
-    //             setWorkList(result);
-    //             alert('작업 목록 성공');
-    //             // 전체 목록 페이지로 이동 추가
-    //         } else {
-    //             console.log("step4")
-    //             alert('작업 목록을 불러오지 못했습니다.');
-    //         }
-    //     }
-    //     getAllList();
-    // }, []);
+    const applyWork = (workID) => {
+        if (isLoggedIn && userId === 'employee1234') {
+            if(window.confirm('해당 작업을 신청하시겠습니까?') === true) {
+                requestWork(workID);
+            }
+        } else {
+            alert("작업 상세정보는 준비중에 있습니다.\n작업 신청을 원하신다면 Employee로 로그인해주세요.")
+        }
+    }
     const handleLogout = () => {
-        try {
-            dispatch(userAction.logout());
+        if (isLoggedIn) {
+            try {
+                dispatch(userAction.logout());
+            } catch(e) {
+                alert('로그아웃 중 오류가 발생했습니다. 화면을 종료 후 다시 실행해주세요.')
+            }
+            alert('로그아웃 되었습니다.');
+        } else {
+            window.history.pushState('', '', '/login');
             window.location.reload();
-            alert('로그아웃 되었습니다.')
-        } catch(e) {
-            alert('로그아웃 중 오류가 발생했습니다. 화면을 종료 후 다시 실행해주세요.')
         }
     }
     useEffect(() => {
         const id = sessionStorage.getItem('id');
-        console.log("hije"+id);
+        const getAllList = async () => {
+            console.log("step1")
+            const result = await getAllWorkList();
+            console.log("step2")
+            if (result) {
+                console.log("step3")
+                setWorkList(result);
+                console.log(result);
+                // 전체 목록 페이지로 이동 추가
+            } else {
+                console.log("step4")
+                alert('작업 목록을 불러오지 못했습니다.\n해당 탭을 닫은 후 다시 시도해주세요.');
+            }
+        }
+        getAllList(); 
         if (id) {
             dispatch(userAction.isLogin(id));
         }
@@ -149,7 +167,7 @@ const HomeScreen = () => {
                         })
                     } */}
                     {
-                        testWorkList.map(item => {
+                        workList.map(item => {
                             return (
                                 <WorkListItem
                                     title={item.title}
@@ -157,7 +175,7 @@ const HomeScreen = () => {
                                     pay={item.pay}
                                     dueDate={searchDueDate(item.dueDate)} 
                                     categoryName={searchCategoryName(item.category)}
-                                    onClick={applyWork}
+                                    onClick={() => applyWork(item.workID)}
                                 />
                             )
                         })

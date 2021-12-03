@@ -21,10 +21,10 @@ const LoginScreen = ( ) => {
         } = event;
         setPassword(value);
     };
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (id === 'employer1234' && password === 'dkwneo1234') {
             try {
-                dispatch(userAction.login(id));
+                await dispatch(userAction.login(id, password));
             } catch(e) {
                 alert('로그인 중 오류가 발생했습니다.\n다시 로그인해주시기 바랍니다.');
             }
@@ -34,7 +34,7 @@ const LoginScreen = ( ) => {
         }
         else if (id === 'employee1234' && password === 'dkwneo1234') {
             try {
-                dispatch(userAction.login(id));
+                await dispatch(userAction.login(id, password));
             } catch(e) {
                 alert('로그인 중 오류가 발생했습니다.\n다시 로그인해주시기 바랍니다.');
             }
