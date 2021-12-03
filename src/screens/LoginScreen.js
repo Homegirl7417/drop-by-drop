@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import WorkRegisterItem from '../component/common/WorkRegisterItem';
 import { Link } from 'react-router-dom';
+import { actionCreators as userAction } from "../redux/modules/users";
 
-const LoginScreen = () => {
+const LoginScreen = ({ history }) => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
     const handleId = event => {
         const {
           target: { value },
@@ -20,10 +23,24 @@ const LoginScreen = () => {
     };
     const handleLogin = () => {
         if (id === 'employer1234' && password === 'dkwneo1234') {
+            try {
+                dispatch(userAction.login('employer1234'));
+            } catch(e) {
+                alert('로그인 중 오류가 발생했습니다.\n다시 로그인해주시기 바랍니다.');
+            }
             alert('employer1234님 로그인에 성공하셨습니다.');
+            window.history.pushState('', '', '/');
+            window.location.reload();
         }
         else if (id === 'employee1234' && password === 'dkwneo1234') {
+            try {
+                dispatch(userAction.login('employee1234'));
+            } catch(e) {
+                alert('로그인 중 오류가 발생했습니다.\n다시 로그인해주시기 바랍니다.');
+            }
             alert('employee1234님 로그인에 성공하셨습니다.');
+            window.history.pushState('', '', '/');
+            window.location.reload();
         }
         else {
             alert('올바르지 않은 아이디 또는 패스워드입니다.\n로그인 정보를 다시 확인해주세요.');
