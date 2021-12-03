@@ -17,13 +17,13 @@ const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
         {
             index: 1,
             title: '일거리 등록',
-            path: '/register/work',
+            path: '/drop-by-drop/register/work',
             func: () => alert('일거리 등록은 Employer만 이용할 수 있습니다.\nEmployer로 로그인 후 이용해주세요')
         },
         {
             index: 2,
             title: '진행 작업 관리',
-            path: '/manage/work',
+            path: '/drop-by-drop/manage/work',
             func: () => alert('시스템 준비중입니다.')
         },
         {
@@ -92,7 +92,7 @@ const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
                     ? <userIdLogin>
                         {userId}님 | 로그아웃
                     </userIdLogin>
-                    : <Login to='/login'>
+                    : <Login to='/drop-by-drop/login'>
                         로그인
                     </Login>
                 }

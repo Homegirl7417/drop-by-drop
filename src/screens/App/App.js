@@ -17,9 +17,9 @@ const App = () => {
                 <Route path='*' element={<HomeScreen/>} />
 
                 {/* <Route exact path='/' element={<HomeScreen/>} /> */}
-                <Route exact path='/register/work' element={<RegisterScreen/>} />
-                <Route exact path='/manage/work' element={<ManageScreen/>} />
-                <Route exact path='/login' element={<LoginScreen/>} />
+                <Route exact path='/drop-by-drop/register/work' element={<RegisterScreen/>} />
+                <Route exact path='/drop-by-drop/manage/work' element={<ManageScreen/>} />
+                <Route exact path='/drop-by-drop/login' element={<LoginScreen/>} />
             </Routes>
         </Container>
     );

@@ -116,7 +116,7 @@ const HomeScreen = () => {
             }
             alert('로그아웃 되었습니다.');
         } else {
-            window.history.pushState('', '', '/login');
+            window.history.pushState('', '', '/drop-by-drop/login');
             window.location.reload();
         }
     }
