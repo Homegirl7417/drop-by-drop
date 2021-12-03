@@ -16,9 +16,9 @@ function logOut() {
     };
 }
 
-function login() {
+function login(id) {
     return dispatch => {
-        dispatch(setLogIn());
+        dispatch(setLogIn(id));
     };
 }
   
@@ -27,6 +27,13 @@ function logout() {
         dispatch(logOut());
     }
 }
+
+const isLogin = (id) => {
+    return dispatch => {
+        if (id !== '') dispatch(setLogIn(id));
+    }
+};
+  
 
 // initial state
 const initialState = {
@@ -48,6 +55,7 @@ function reducer(state = initialState, action) {
 
 function applyLogIn(state, action) {
     const { id } = action;
+    sessionStorage.setItem('id', id);
     return {
         ...state,
         isLoggedIn: true,
@@ -56,6 +64,7 @@ function applyLogIn(state, action) {
 }
 
 function applyLogOut(state, action) {
+    sessionStorage.removeItem('id');
     return {
         isLoggedIn: false,
         id: ''
@@ -65,7 +74,8 @@ function applyLogOut(state, action) {
 //exports
 const actionCreators = {
     login,
-    logout
+    logout,
+    isLogin
 };
 export { actionCreators };
   

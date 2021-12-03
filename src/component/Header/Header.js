@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
     const [currentRoute, setCurrentRoute] = useState(0);
     const [path, setPath] = useState('/'); 
     // const { pathname } = useLocation();
@@ -80,12 +80,16 @@ const Header = () => {
                     )
                 }   
             </NavigationSection>
-            <LoginSection>
-                <Login
-                    to='/login'
-                >
-                    로그인
-                </Login>
+            <LoginSection isLoggedIn={isLoggedIn}>
+                {
+                    isLoggedIn
+                    ? <userIdLogin onClick={handleLogout}>
+                        {userId}님 | 로그아웃
+                    </userIdLogin>
+                    : <Login to='/login'>
+                        로그인
+                    </Login>
+                }
             </LoginSection>
         </HeaderContainer>
     );
@@ -110,20 +114,21 @@ const LogoTitle = styled.span`
     color: orange;
 `
 
-const LoginSection = styled.div``
-
-const Login = styled(Link)`
-    display: block;
+const LoginSection = styled.div`
+    width: ${props => props.isLoggedIn ? '200px' : '100px'};
+    height: 30px;
     background-color: orange;
     color: white;
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
-    width: 100px;
-    height: 30px;
     line-height: 30px;
     border-radius: 20px;
     cursor: pointer;
 `
+
+const userIdLogin = styled.div``
+
+const Login = styled(Link)``
 
 const NavigationSection = styled.div`
     display: flex;

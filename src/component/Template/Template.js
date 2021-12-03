@@ -6,7 +6,7 @@ const Template = (props) => {
     return (
         <Container>
             <InnerContainer>
-                <Header/>
+                <Header isLoggedIn={props.isLoggedIn} userId={props.userId} handleLogout={props.handleLogout} />
                 <Contents>
                     {props.children}
                 </Contents>

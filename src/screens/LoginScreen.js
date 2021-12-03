@@ -5,7 +5,7 @@ import WorkRegisterItem from '../component/common/WorkRegisterItem';
 import { Link } from 'react-router-dom';
 import { actionCreators as userAction } from "../redux/modules/users";
 
-const LoginScreen = ({ history }) => {
+const LoginScreen = ( ) => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();

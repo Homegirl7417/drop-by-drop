@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Template from '../component/Template';
 import WorkListItem from '../component/common/WorkListItem';
 import getAllWorkList from '../api/getAllWorkList';
 import WorkTemplate from '../component/WorkTemplate';
+import { actionCreators as userAction } from "../redux/modules/users";
 
 const HomeScreen = () => {
-    const isLoggedIn = useSelector((store) => store.isLoggedIn);
-    const userId = useSelector((store) => store.id);
-    const store = useSelector((store) => store);
-    console.log('ooo'+JSON.stringify(store));
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector((store) => store.users.isLoggedIn);
+    const userId = useSelector((store) => store.users.id);
     const searchCategoryName = (input) => {
         let currentCategory = '기타';
         switch (input){
@@ -107,14 +107,31 @@ const HomeScreen = () => {
     //     }
     //     getAllList();
     // }, []);
-
+    const handleLogout = () => {
+        try {
+            dispatch(userAction.logout());
+            window.location.reload();
+            alert('로그아웃 되었습니다.')
+        } catch(e) {
+            alert('로그아웃 중 오류가 발생했습니다. 화면을 종료 후 다시 실행해주세요.')
+        }
+    }
+    useEffect(() => {
+        const id = sessionStorage.getItem('id');
+        console.log("hije"+id);
+        if (id) {
+            dispatch(userAction.isLogin(id));
+        }
+    }, []);
     return (
-        <Template>
+        <Template
+            isLoggedIn={isLoggedIn}
+            userId={userId}
+            handleLogout={handleLogout}
+        >
             <WorkTemplate
                 title="등록된 일거리"
                 isBorder={false}
-                isLoggedIn={isLoggedIn}
-                userId={userId}
             >
                 <ListGrid>
                     {/* {
