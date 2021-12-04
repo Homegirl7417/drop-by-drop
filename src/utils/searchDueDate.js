@@ -5,7 +5,7 @@ export default (input) => {
             currentDueDate = '상시모집';
             break;                                  
         default:
-            currentDueDate = input;
+            currentDueDate = input+' 마감';
             break; 
     }
     return currentDueDate; 

@@ -42,7 +42,7 @@ const HomeScreen = () => {
             //     requestWork(workID);
             // } 여기부터 다시
         } else {
-            alert("작업 상세정보는 준비중에 있습니다.\n작업 신청을 원하신다면 Employee로 로그인해주세요.")
+            alert("작업 신청을 원하신다면 Employee로 로그인해주세요.")
         }
     }
     const handleLogout = () => {
@@ -100,6 +100,7 @@ const HomeScreen = () => {
                                     dueDate={searchDueDate(item.dueDate)} 
                                     categoryName={searchCategoryName(item.category)}
                                     onClick={() => applyWork(item.workID, item.title)}
+                                    button="작업 신청"
                                 />
                             )
                         })

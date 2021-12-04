@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import TodoItem from './TodoItem';
 
-const WorkListItem = ({ isBorder=true, title='', description='', pay=null, dueDate='', categoryName, onClick=null }) => {
+const WorkListItem = ({ isBorder=true, title='', description='', pay=null, dueDate='', categoryName, onClick=null, button="" }) => {
     return (
-        <Container isBorder={isBorder} onClick={onClick}>
+        <Container isBorder={isBorder}>
             <CategorySection>
                 <Category>
                     {categoryName}
@@ -13,14 +14,37 @@ const WorkListItem = ({ isBorder=true, title='', description='', pay=null, dueDa
                 <Title>
                     {title}
                 </Title>
-                <EmployerInfoSection>
-                    <Pay>{pay}원</Pay>
-                    <Pay>마감일: &nbsp;{dueDate}</Pay>
-                </EmployerInfoSection>
                 <Description outline={'none'} readOnly={true}>
                     {description}
-                </Description>                
+                </Description>
             </WorkInfoSection>
+            <TodoSection>
+                <Title>
+                    Todo CheckList
+                </Title> 
+                <TodoItem
+                    title={"1. 이미지 파일 수령"}
+                    description={"hk7417로 연락주세요."}
+                />
+                <TodoItem
+                    title={"1. 이미지 파일 수령"}
+                    description={"hk7417로 연락주세요."}
+                /> 
+                <TodoItem
+                    title={"1. 이미지 파일 수령"}
+                    description={"hk7417로 연락주세요."}
+                />      
+            </TodoSection>
+            <WorkSection>
+                <DueDate>{dueDate}</DueDate>
+                <Pay>{pay}원</Pay>
+                {
+                    button &&
+                    <WorkButtonSection>
+                        <Button onClick={onClick}>{button}</Button>
+                    </WorkButtonSection>
+                }
+            </WorkSection>               
         </Container>
     );
 }
@@ -36,40 +60,58 @@ const Container = styled.div`
     height: 300px;
     border: ${props => props.isBorder ? '1px solid lightgray' : 'none'};
     border-radius: 10px;
-    padding: 20px 30px;
+    padding: 30px;
     text-align: left;
     cursor: ${props => props.onClick ? 'pointer': 'default'};
     margin-top: 20px;
 `
 
-const CategorySection = styled.div`
-    width: 230px;
-    height: 30px;
-    display: flex;
-    flex-directions: row;
-    justify-content: flex-start;
-    align-items: flex-start;
+const TodoSection = styled.div`
+    width: 240px;
+    text-align: left;
 `
 
-const WorkInfoSection = styled.div``
+const CategorySection = styled.div`
+    width: 240px;
+    height: 30px;
+    margin-bottom: 10px;
+`
 
-const EmployerInfoSection = styled.div`
+const WorkSection = styled.div`
+    width: 240px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 230px;
-    height: 20px;
+    justify-content: space-between;
     padding-top: 15px;
-    border-bottom: 0.5px solid gray;
+`
+const WorkInfoSection = styled.div`
+
+`
+
+const WorkDetailSection = styled.div`
+    display: flex;
+`
+
+const WorkButtonSection = styled.div`
+
+`
+const DueDate = styled.div`
+    width: 90px;
+    font-size: 12px;
+    font-weight: bold;
 `
 
 const Pay = styled.div`
+    width: 60px;
     font-size: 12px;
+    font-weight: bold;
+    text-align: center;
 `
 
 const Title = styled.div`
+    width: 240px;
     min-height: 30px;
-    line-height: 30px;
+    line-height: 25px;
     font-size: 18px;
     font-weight: bold;
     color: orange;
@@ -77,9 +119,9 @@ const Title = styled.div`
 
 const Description = styled.textarea`
     width: 240px;
-    min-height: 100px;
-    margin-top: 20px;
-    font-size: 14px;
+    min-height: 40px;
+    font-size: 12px;
+    line-height: 14px;
     color: black;
     resize: none;
     outline: none;
@@ -95,4 +137,16 @@ const Category = styled.div`
     border-radius: 20px;
     color: black;
     text-align: center;
+`
+
+const Button = styled.div`
+    width: 80px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 14px;
+    background-color: orange;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
 `

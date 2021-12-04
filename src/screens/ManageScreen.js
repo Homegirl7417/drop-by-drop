@@ -161,6 +161,7 @@ const ManageScreen = () => {
                                 categoryName={searchCategoryName(item.category)}
                                 nickName={'김철수'}
                                 onClick={() => alert('작업 검토 완료 API 연결하고 WorkListItem 디자인 변경하기')}
+                                button="검토 완료"
                             />                        
                         )
                     })}
