@@ -8,11 +8,15 @@ import RegisteredWorkItem from '../component/common/RegisteredWorkItem';
 import getEmployerWorkList from '../api/getEmployerWorkList';
 import searchDueDate from '../utils/searchDueDate';
 import searchCategoryName from '../utils/searchCategoryName';
+import Modal from '../component/Modal';
 
 const ManageScreen = () => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((store) => store.users.isLoggedIn);
     const userId = useSelector((store) => store.users.id);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [applyWorkID, setApplyWorkID] = useState('');
     const [registeredList, setRegisteredList] = useState([]);
     const [workingList, setWorkingList] = useState([]);
     const [completedList, setCompletedList] = useState([]);
@@ -26,6 +30,11 @@ const ManageScreen = () => {
             alert('로그아웃 중 오류가 발생했습니다. 화면을 종료 후 다시 실행해주세요.')
         }
     }
+    const handleAccept = (workID, title) => {
+        setModalIsOpen(true);
+        setApplyWorkID(workID);
+        setModalTitle(title);
+    };
     useEffect(() => {
         const id = sessionStorage.getItem('id');
         const getRegisteredWork = async () => {
@@ -60,12 +69,14 @@ const ManageScreen = () => {
                 isBorder={false}       
             >
                 <RegisteredWorkItem
-                    title={'테스트 작업'}
+                    title={'테스트 작업 제목'}
                     description={'테스트 작업 설명'}
                     pay={44444}
                     dueDate={'2021-12-28'} 
                     categoryName={'라벨링'}
                     nickName={'김철수'}
+                    rejectHandler={() => alert('신청 거절 API 연결')}
+                    acceptHandler={() => handleAccept(100000 ,'테스트 작업 제목')}
                 />   
                 {/* {registeredList.map(item => {
                     return (
@@ -76,10 +87,22 @@ const ManageScreen = () => {
                             dueDate={searchDueDate(item.dueDate)} 
                             categoryName={searchCategoryName(item.category)}
                             nickName={'김철수'}
+                            rejectHandler={() => alert('신청 거절 API 연결')}
+                            acceptHandler={() => handleAccept(item.workID, item.title)}
                         />                        
                     )
                 })} */}
             </WorkTemplate>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                title={modalTitle}
+                subtitle={`에 대한 김철수님 지원을 수락하시겠습니까?`}
+                description="수락시 보수 지급을 위한 결제가 진행됩니다."
+                acceptText="수락"
+                cancleHandler={() => setModalIsOpen(false)}
+                acceptHandler={() => alert('작업 신청 수락API 연결하기')}
+            />
         </Template>
     );
 }

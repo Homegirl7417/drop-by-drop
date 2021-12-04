@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import WorkListItem from './WorkListItem';
 import ProfileImage from '../../image/profileImage1.png';
 
-const RegisteredWorkItem = ({ title, description, pay, dueDate, categoryName, nickName }) => {
+const RegisteredWorkItem = ({ title, description, pay, dueDate, categoryName, nickName, rejectHandler, acceptHandler }) => {
     return (
         <RegisteredWorkForm>
             <WorkSection>
@@ -24,8 +24,8 @@ const RegisteredWorkItem = ({ title, description, pay, dueDate, categoryName, ni
                             <UserName>{nickName}</UserName>
                         </ProfileSection>
                         <ButtonSection>
-                            <AcceptButton>수락</AcceptButton>
-                            <CancleButton>거절</CancleButton>                                
+                            <AcceptButton onClick={acceptHandler}>수락</AcceptButton>
+                            <RejectButton onClick={rejectHandler}>거절</RejectButton>                                
                         </ButtonSection>
                     </ApplyItem>
                 </ApplyList>
@@ -108,7 +108,7 @@ const ButtonStyle = styled.div`
     cursor: pointer;
 `
 
-const CancleButton = styled(ButtonStyle)`
+const RejectButton = styled(ButtonStyle)`
     background-color: lightgray;
     color: black;
 `
