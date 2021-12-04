@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import WorkListItem from './WorkListItem';
 import ProfileImage from '../../image/profileImage1.png';
 
-const RegisteredWorkItem = ({ title, description, pay, dueDate, categoryName, nickName, rejectHandler, acceptHandler }) => {
+const RequestWorkItem = ({ title, description, pay, dueDate, categoryName, nickName, rejectHandler, acceptHandler }) => {
     return (
-        <RegisteredWorkForm>
+        <Container>
             <WorkSection>
                 <WorkListItem
                     title={title}
@@ -30,13 +30,13 @@ const RegisteredWorkItem = ({ title, description, pay, dueDate, categoryName, ni
                     </ApplyItem>
                 </ApplyList>
             </ApplySection>
-        </RegisteredWorkForm>
+        </Container>
     );
 }
 
-export default RegisteredWorkItem;
+export default RequestWorkItem;
 
-const RegisteredWorkForm = styled.div`
+const Container = styled.div`
     display: flex;
     flex: 1 2;
     min-height: 300px;

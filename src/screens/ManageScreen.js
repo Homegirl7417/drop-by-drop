@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Template from '../component/Template';
 import { actionCreators as userAction } from "../redux/modules/users";
 import WorkTemplate from '../component/WorkTemplate';
-import RegisteredWorkItem from '../component/common/RegisteredWorkItem';
+import RequestWorkItem from '../component/common/RequestWorkItem';
 import getEmployerWorkList from '../api/getEmployerWorkList';
 import searchDueDate from '../utils/searchDueDate';
 import searchCategoryName from '../utils/searchCategoryName';
@@ -17,9 +17,12 @@ const ManageScreen = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [applyWorkID, setApplyWorkID] = useState('');
-    const [registeredList, setRegisteredList] = useState([]);
-    const [workingList, setWorkingList] = useState([]);
-    const [completedList, setCompletedList] = useState([]);
+    const [registeredList, setRegisteredList] = useState([]); //work status 0(작업 진행전)의 작업 목록
+    const [workingList, setWorkingList] = useState([]); //work status 1(작업 진행중)의 작업 목록
+    const [workedList, setWorkedList] = useState([]); //work status 2(작업 완료)의 작업 목록
+    const [requestList, setRequesetList] = useState([]); //work status 3(작업 신청 들어온 상태)의 작업 목록
+    const [evaluationList, setEvaluationList] = useState([]); //work status 4(작업 완료 검토 요청)의 작업 목록
+    const [completedList, setCompletedList] = useState([]); //work status 5(보수지급완료)의 작업 목록
     const handleLogout = async () => {
         try {
             await dispatch(userAction.logout());
@@ -43,10 +46,12 @@ const ManageScreen = () => {
             console.log("step2 getRegisteredWork")
             if (result) {
                 console.log("step3 getRegisteredWork")
-                setRegisteredList(result.filter(item => item.workStatus === 0 || item.workStatus === 3));
+                setRegisteredList(result.filter(item => item.workStatus === 0));
                 setWorkingList(result.filter(item => item.workStatus === 1));
-                setCompletedList(result.filter(item => item.workStatus === 2));
-                console.log(result);
+                setWorkedList(result.filter(item => item.workStatus === 2));
+                setRequesetList(result.filter(item => item.workStatus === 3));
+                setEvaluationList(result.filter(item => item.workStatus === 4));
+                setCompletedList(result.filter(item => item.workStatus === 5));
                 // 전체 목록 페이지로 이동 추가
             } else {
                 console.log("step4 getRegisteredWork")
@@ -55,7 +60,7 @@ const ManageScreen = () => {
         }
         if (id) {
             dispatch(userAction.isLogin(id));
-            // id === 'employer1234' && getRegisteredWork();
+            id === 'employer1234' && getRegisteredWork();
         }
     }, []);
     return (
@@ -68,7 +73,7 @@ const ManageScreen = () => {
                 title="등록한 일거리"
                 isBorder={false}       
             >
-                <RegisteredWorkItem
+                {/* <RequestWorkItem
                     title={'테스트 작업 제목'}
                     description={'테스트 작업 설명'}
                     pay={44444}
@@ -77,10 +82,10 @@ const ManageScreen = () => {
                     nickName={'김철수'}
                     rejectHandler={() => alert('신청 거절 API 연결')}
                     acceptHandler={() => handleAccept(100000 ,'테스트 작업 제목')}
-                />   
-                {/* {registeredList.map(item => {
+                />    */}
+                {requestList.map(item => {
                     return (
-                        <RegisteredWorkItem
+                        <RequestWorkItem
                             title={item.title}
                             description={item.description}
                             pay={item.pay}
@@ -91,7 +96,7 @@ const ManageScreen = () => {
                             acceptHandler={() => handleAccept(item.workID, item.title)}
                         />                        
                     )
-                })} */}
+                })}
             </WorkTemplate>
             <Modal
                 isOpen={modalIsOpen}
