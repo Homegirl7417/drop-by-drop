@@ -7,11 +7,15 @@ import getAllWorkList from '../api/getAllWorkList';
 import WorkTemplate from '../component/WorkTemplate';
 import { actionCreators as userAction } from "../redux/modules/users";
 import putRequestWork from '../api/putRequestWork';
+import Modal from '../component/Modal';
 
 const HomeScreen = () => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((store) => store.users.isLoggedIn);
     const userId = useSelector((store) => store.users.id);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [applyWorkID, setApplyWorkID] = useState('');
     const searchCategoryName = (input) => {
         let currentCategory = '기타';
         switch (input){
@@ -49,60 +53,28 @@ const HomeScreen = () => {
         return currentDueDate; 
     }
     const [workList, setWorkList] = useState([]);
-    const [testWorkList, setTestWorkList] = useState([
-        {
-            title: '강아지 산책',
-            description: '강아지를 1시간동안 산책시켜주세요',
-            pay: 100000, 
-            dueDate: '2021-12-27',
-            category: 0
-        },
-        {
-            title: '강아지 산책',
-            description: '강아지를 1시간동안 산책시켜주세요',
-            pay: 100000, 
-            dueDate: '2021-12-27',
-            category: 0
-        },
-        {
-            title: '강아지 산책',
-            description: '강아지를 1시간동안 산책시켜주세요',
-            pay: 100000, 
-            dueDate: '2021-12-27',
-            category: 0
-        },
-        {
-            title: '강아지 산책',
-            description: '강아지를 1시간동안 산책시켜주세요',
-            pay: 100000, 
-            dueDate: '2021-12-27',
-            category: 0
-        },
-        {
-            title: '강아지 산책',
-            description: '강아지를 1시간동안 산책시켜주세요',
-            pay: 100000, 
-            dueDate: '2021-12-27',
-            category: 0
-        },
-    ]);
-    const requestWork = async (workID) => {
+    const requestWork = async () => {
         console.log("step1")
-        const result = await putRequestWork(workID);
+        const result = await putRequestWork(applyWorkID);
         console.log("step2")
         if (result) {
-            console.log("step3")
+            console.log("step3");
+            setModalIsOpen(false);
             alert('작업이 신청되었습니다.');
         } else {
-            console.log("step4")
+            console.log("step4");
+            setModalIsOpen(false);
             alert('작업 신청 중 오류가 발생했습니다. \n잠시 후 다시 시도해주시기 바랍니다.');
         }
     }
-    const applyWork = (workID) => {
+    const applyWork = (workID, title) => {
         if (isLoggedIn && userId === 'employee1234') {
-            if(window.confirm('해당 작업을 신청하시겠습니까?') === true) {
-                requestWork(workID);
-            }
+            setApplyWorkID(workID);
+            setModalTitle(title);
+            setModalIsOpen(true);
+            // if(window.confirm('해당 작업을 신청하시겠습니까?') === true) {
+            //     requestWork(workID);
+            // } 여기부터 다시
         } else {
             alert("작업 상세정보는 준비중에 있습니다.\n작업 신청을 원하신다면 Employee로 로그인해주세요.")
         }
@@ -152,20 +124,6 @@ const HomeScreen = () => {
                 isBorder={false}
             >
                 <ListGrid>
-                    {/* {
-                        workList.map(item => {
-                            return (
-                                <WorkListItem
-                                    title={item.title}
-                                    description={item.description}
-                                    pay={item.pay}
-                                    dueDate={searchDueDate(item.dueDate)} 
-                                    categoryName={searchCategoryName(item.category)}
-                                    onClick={applyWork}
-                                />
-                            )
-                        })
-                    } */}
                     {
                         workList.map(item => {
                             return (
@@ -175,13 +133,22 @@ const HomeScreen = () => {
                                     pay={item.pay}
                                     dueDate={searchDueDate(item.dueDate)} 
                                     categoryName={searchCategoryName(item.category)}
-                                    onClick={() => applyWork(item.workID)}
+                                    onClick={() => applyWork(item.workID, item.title)}
                                 />
                             )
                         })
                     }
                 </ListGrid>
             </WorkTemplate>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                title={modalTitle}
+                subtitle="작업을 신청하시겠습니까?"
+                acceptText="신청"
+                cancleHandler={() => setModalIsOpen(false)}
+                acceptHandler={requestWork}
+            />
         </Template>
     );
 }
