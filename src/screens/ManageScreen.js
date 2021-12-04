@@ -9,6 +9,7 @@ import getEmployerWorkList from '../api/getEmployerWorkList';
 import searchDueDate from '../utils/searchDueDate';
 import searchCategoryName from '../utils/searchCategoryName';
 import Modal from '../component/Modal';
+import SimpleSlider from '../component/common/SimpleSlider';
 
 const ManageScreen = () => {
     const dispatch = useDispatch();
@@ -73,30 +74,22 @@ const ManageScreen = () => {
                 title="등록한 일거리"
                 isBorder={false}       
             >
-                {/* <RequestWorkItem
-                    title={'테스트 작업 제목'}
-                    description={'테스트 작업 설명'}
-                    pay={44444}
-                    dueDate={'2021-12-28'} 
-                    categoryName={'라벨링'}
-                    nickName={'김철수'}
-                    rejectHandler={() => alert('신청 거절 API 연결')}
-                    acceptHandler={() => handleAccept(100000 ,'테스트 작업 제목')}
-                />    */}
-                {requestList.map(item => {
-                    return (
-                        <RequestWorkItem
-                            title={item.title}
-                            description={item.description}
-                            pay={item.pay}
-                            dueDate={searchDueDate(item.dueDate)} 
-                            categoryName={searchCategoryName(item.category)}
-                            nickName={'김철수'}
-                            rejectHandler={() => alert('신청 거절 API 연결')}
-                            acceptHandler={() => handleAccept(item.workID, item.title)}
-                        />                        
-                    )
-                })}
+                <SimpleSlider>
+                    {requestList.map(item => {
+                        return (
+                            <RequestWorkItem
+                                title={item.title}
+                                description={item.description}
+                                pay={item.pay}
+                                dueDate={searchDueDate(item.dueDate)} 
+                                categoryName={searchCategoryName(item.category)}
+                                nickName={'김철수'}
+                                rejectHandler={() => alert('신청 거절 API 연결')}
+                                acceptHandler={() => handleAccept(item.workID, item.title)}
+                            />                        
+                        )
+                    })}
+                </SimpleSlider>
             </WorkTemplate>
             <Modal
                 isOpen={modalIsOpen}
