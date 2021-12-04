@@ -30,7 +30,7 @@ const InnerContainer = styled.div`
 const Contents = styled.div`
     min-height: calc(100vh - 100px);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     padding: 50px 0px;
     text-align: center;

@@ -80,6 +80,7 @@ const RegisterScreen = () => {
         >
             <WorkTemplate
                 title="일거리 등록"
+                isRegisterForm={true}
             >
                 <WorkRegisterItem
                     title={`제목(${title.length}/최대 30자)`}

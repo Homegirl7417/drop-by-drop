@@ -32,13 +32,13 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 230px;
+    width: 200px;
     height: 300px;
     border: ${props => props.isBorder ? '1px solid lightgray' : 'none'};
     border-radius: 10px;
     padding: 20px 30px;
     text-align: left;
-    cursor: pointer;
+    cursor: ${props => props.onClick ? 'pointer': 'default'};
     margin-top: 20px;
 `
 
