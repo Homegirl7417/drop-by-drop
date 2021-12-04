@@ -18,13 +18,13 @@ const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
             index: 1,
             title: '일거리 등록',
             path: '/register/work',
-            func: () => alert('일거리 등록은 Employer만 이용할 수 있습니다.\nEmployer로 로그인 후 이용해주세요')
+            func: () => alert('일거리 등록은 Employer만 이용할 수 있습니다.\nEmployer로 로그인 후 이용해주세요.')
         },
         {
             index: 2,
             title: '진행 작업 관리',
             path: '/manage/work',
-            func: () => alert('시스템 준비중입니다.')
+            func: () => alert('진행 작업 관리는 로그인 후 이용하실 수 있습니다.')
         },
         {
             index: 3,
@@ -65,7 +65,7 @@ const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
             <NavigationSection>
                 {
                     navigation.map(item => 
-                        item.title === '고객문의' || item.title === '진행 작업 관리' 
+                        item.title === '고객문의' || (item.title === '진행 작업 관리' && !isLoggedIn)
                         ?  <NavigationAlert onClick={item.func}>
                             {item.title}
                         </NavigationAlert>

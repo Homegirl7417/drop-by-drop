@@ -8,6 +8,8 @@ import WorkTemplate from '../component/WorkTemplate';
 import { actionCreators as userAction } from "../redux/modules/users";
 import putRequestWork from '../api/putRequestWork';
 import Modal from '../component/Modal';
+import searchDueDate from '../utils/searchDueDate';
+import searchCategoryName from '../utils/searchCategoryName';
 
 const HomeScreen = () => {
     const dispatch = useDispatch();
@@ -16,42 +18,6 @@ const HomeScreen = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [applyWorkID, setApplyWorkID] = useState('');
-    const searchCategoryName = (input) => {
-        let currentCategory = '기타';
-        switch (input){
-            case 0: 
-                currentCategory = '라벨링';
-                break; 
-            case 1:
-                currentCategory = '설문조사';
-                break;
-            case 2:
-                currentCategory = '심부름';
-                break;
-            case 3:
-                currentCategory = '초안 번역';
-                break; 
-            case 4:
-                currentCategory = '블로그 포스팅';
-                break;                                   
-            default:
-                currentCategory = '기타';
-                break; 
-        }
-        return currentCategory; 
-    }
-    const searchDueDate = (input) => {
-        let currentDueDate = '상시모집';
-        switch (input){
-            case null: 
-                currentDueDate = '상시모집';
-                break;                                  
-            default:
-                currentDueDate = input;
-                break; 
-        }
-        return currentDueDate; 
-    }
     const [workList, setWorkList] = useState([]);
     const requestWork = async () => {
         console.log("step1")
@@ -88,23 +54,23 @@ const HomeScreen = () => {
             }
             alert('로그아웃 되었습니다.');
         } else {
-            window.history.pushState('', '', '/drop-by-drop/login');
+            window.history.pushState('', '', '/login');
             window.location.reload();
         }
     }
     useEffect(() => {
         const id = sessionStorage.getItem('id');
         const getAllList = async () => {
-            console.log("step1")
+            console.log("step1 getAllList")
             const result = await getAllWorkList();
-            console.log("step2")
+            console.log("step2 getAllList")
             if (result) {
-                console.log("step3")
+                console.log("step3 getAllList")
                 setWorkList(result);
                 console.log(result);
                 // 전체 목록 페이지로 이동 추가
             } else {
-                console.log("step4")
+                console.log("step4 getAllList")
                 alert('작업 목록을 불러오지 못했습니다.\n해당 탭을 닫은 후 다시 시도해주세요.');
             }
         }

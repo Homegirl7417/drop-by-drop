@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const WorkListItem = ({ title='', description='', pay=null, dueDate='', categoryName, onClick }) => {
+const WorkListItem = ({ isBorder=true, title='', description='', pay=null, dueDate='', categoryName, onClick=null }) => {
     return (
-        <Container onClick={onClick}>
+        <Container isBorder={isBorder} onClick={onClick}>
             <CategorySection>
                 <Category>
                     {categoryName}
@@ -34,7 +34,7 @@ const Container = styled.div`
     align-items: center;
     width: 230px;
     height: 300px;
-    border: 1px solid gray;
+    border: ${props => props.isBorder ? '1px solid lightgray' : 'none'};
     border-radius: 10px;
     padding: 20px 30px;
     text-align: left;
@@ -91,7 +91,7 @@ const Category = styled.div`
     height: 20px;
     font-size: 8px;
     line-height: 22px;
-    background-color: gray;
+    background-color: #E1F5FE;
     border-radius: 20px;
     color: black;
     text-align: center;
