@@ -10,11 +10,14 @@ import searchDueDate from '../utils/searchDueDate';
 import searchCategoryName from '../utils/searchCategoryName';
 import Modal from '../component/Modal';
 import SimpleSlider from '../component/common/SimpleSlider';
+import putRejectWork from '../api/putRejectWork';
+import putAcceptWork from '../api/putAcceptWork';
 
 const ManageScreen = () => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((store) => store.users.isLoggedIn);
     const userId = useSelector((store) => store.users.id);
+    const [isSubmit, setIsSubmit] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [applyWorkID, setApplyWorkID] = useState('');
@@ -34,11 +37,44 @@ const ManageScreen = () => {
             alert('로그아웃 중 오류가 발생했습니다. 화면을 종료 후 다시 실행해주세요.')
         }
     }
-    const handleAccept = (workID, title) => {
-        setModalIsOpen(true);
-        setApplyWorkID(workID);
-        setModalTitle(title);
+    const handleAcceptButton = (workID, title) => {
+        if (!isSubmit) {
+            setIsSubmit(true);
+            setApplyWorkID(workID);
+            setModalTitle(title);
+            setModalIsOpen(true);
+            setIsSubmit(false);
+        }
     };
+    const handleRejectButton = async (workID, title) => {
+        if (!isSubmit) {
+            setIsSubmit(true);
+            const result = await putRejectWork(workID);
+            if (result) {
+                alert(`작업: ${title}\n작업 진행 거절이 완료되었습니다.`);
+                window.location.reload();
+            } else {
+                alert(`작업: ${title}\n작업 진행 거절 중 오류가 발생했습니다.\n해당 탭을 닫고 다시 시도해주세요.`);
+                window.location.reload();
+            }
+            setIsSubmit(false);
+        }
+    }
+    const handleAcceptApplication = async () => {
+        if (!isSubmit) {
+            setIsSubmit(true);
+            const result = await putAcceptWork(applyWorkID);
+            if (result) {
+                alert(`작업: ${modalTitle}\n작업 진행 수락과 보수 결제가 완료되었습니다.`);
+                window.location.reload();
+            } else {
+                alert(`작업: ${modalTitle}\n작업 진행 수락 중 오류가 발생했습니다.\n해당 탭을 닫고 다시 시도해주세요.`);
+                window.location.reload();
+            }
+            setModalIsOpen(false);
+            setIsSubmit(false);
+        }
+    }
     useEffect(() => {
         const id = sessionStorage.getItem('id');
         const getRegisteredWork = async () => {
@@ -84,8 +120,8 @@ const ManageScreen = () => {
                                 dueDate={searchDueDate(item.dueDate)} 
                                 categoryName={searchCategoryName(item.category)}
                                 nickName={'김철수'}
-                                rejectHandler={() => alert('신청 거절 API 연결')}
-                                acceptHandler={() => handleAccept(item.workID, item.title)}
+                                rejectHandler={() => handleRejectButton(item.workID, item.title)}
+                                acceptHandler={() => handleAcceptButton(item.workID, item.title)}
                             />                        
                         )
                     })}
@@ -99,7 +135,7 @@ const ManageScreen = () => {
                 description="수락시 보수 지급을 위한 결제가 진행됩니다."
                 acceptText="수락"
                 cancleHandler={() => setModalIsOpen(false)}
-                acceptHandler={() => alert('작업 신청 수락API 연결하기')}
+                acceptHandler={handleAcceptApplication}
             />
         </Template>
     );
