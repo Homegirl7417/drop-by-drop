@@ -1,12 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const TodoItem = ({ title, description }) => {
+const TodoItem = ({ isCheck=false, title="", description="", check=false, onClickCheck=null }) => {
     return (
         <TodoItemSection>
-            <TodoItemTitle>
-                {title}
-            </TodoItemTitle>
+            <TitleSection>
+                <TodoItemTitle>
+                    {title}
+                </TodoItemTitle>
+                {
+                    isCheck &&
+                    <TodoItemCheck type="radio" value={check} onClick={onClickCheck}/>
+                }
+            </TitleSection>
             <TodoItemDescription>
                 {description}
             </TodoItemDescription>
@@ -16,14 +22,23 @@ const TodoItem = ({ title, description }) => {
 
 export default TodoItem;
 
-const TodoItemSection = styled.div`
-    margin-top: 10px;
+const TodoItemSection = styled.div``
+
+const TitleSection = styled.div`
+    display: flex;
 `
 
 const TodoItemTitle = styled.div`
+    display: inline-block;
+    width: 220px;
     font-size: 14px;
     line-height: 20px;
     font-weight: bold;
+    vertical-align: text-bottom;
+`
+const TodoItemCheck = styled.input`
+    width: 18px;
+    height: 20px;
 `
 const TodoItemDescription = styled.div`
     font-size: 12px;

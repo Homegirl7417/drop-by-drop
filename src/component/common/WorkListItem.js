@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import TodoItem from './TodoItem';
 
-const WorkListItem = ({ isBorder=true, title='', description='', pay=null, dueDate='', categoryName, onClick=null, button="" }) => {
+const WorkListItem = ({ isBorder=true, title='', description='', pay=null, dueDate='', categoryName, onClick=null, button="", isCheck, check, onClickCheck }) => {
     return (
         <Container isBorder={isBorder}>
             <CategorySection>
@@ -25,14 +25,23 @@ const WorkListItem = ({ isBorder=true, title='', description='', pay=null, dueDa
                 <TodoItem
                     title={"1. 이미지 파일 수령"}
                     description={"hk7417로 연락주세요."}
+                    isCheck={isCheck} 
+                    check={check}
+                    onClickCheck={onClickCheck}
                 />
                 <TodoItem
                     title={"1. 이미지 파일 수령"}
                     description={"hk7417로 연락주세요."}
-                /> 
+                    isCheck={isCheck} 
+                    check={check}
+                    onClickCheck={onClickCheck}
+                />
                 <TodoItem
                     title={"1. 이미지 파일 수령"}
                     description={"hk7417로 연락주세요."}
+                    isCheck={isCheck} 
+                    check={check}
+                    onClickCheck={onClickCheck}
                 />      
             </TodoSection>
             <WorkSection>
