@@ -9,7 +9,6 @@ export default async function postWorkForm(title, description, pay, category, du
 }
 
 const postApi = async (title, description, pay, category, dueDate, checkList) => {
-    console.log('작업 등록 API'+ title+ description+ pay+ category+ dueDate+checkList);
     const { data: json } = await api.post(`/work-form`, {
         title,
         description,

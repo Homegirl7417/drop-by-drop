@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const TodoItem = ({ isCheck=false, title="", description="", check=false, onClickCheck=null }) => {
+const TodoItem = ({ isCheck=false, title="", description="", checked, onClickCheck=null }) => {
     return (
         <TodoItemSection>
             <TitleSection>
@@ -10,7 +10,7 @@ const TodoItem = ({ isCheck=false, title="", description="", check=false, onClic
                 </TodoItemTitle>
                 {
                     isCheck &&
-                    <TodoItemCheck type="radio" value={check} onClick={onClickCheck}/>
+                    <TodoItemCheck type="radio" checked={checked} onClick={onClickCheck}/>
                 }
             </TitleSection>
             <TodoItemDescription>

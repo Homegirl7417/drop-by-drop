@@ -16,20 +16,17 @@ const HomeScreen = () => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((store) => store.users.isLoggedIn);
     const userId = useSelector((store) => store.users.id);
+    const [isLoading, setIsLoading] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [applyWorkID, setApplyWorkID] = useState('');
     const [workList, setWorkList] = useState([]);
     const requestWork = async () => {
-        console.log("step1")
         const result = await putRequestWork(applyWorkID);
-        console.log("step2")
         if (result) {
-            console.log("step3");
             setModalIsOpen(false);
             alert('작업이 신청되었습니다.');
         } else {
-            console.log("step4");
             setModalIsOpen(false);
             alert('작업 신청 중 오류가 발생했습니다. \n잠시 후 다시 시도해주시기 바랍니다.');
         }
@@ -59,91 +56,67 @@ const HomeScreen = () => {
     useEffect(() => {
         const id = sessionStorage.getItem('id');
         const getAllList = async () => {
-            console.log("step1 getAllList")
             const result = await getAllWorkList();
-            console.log("step2 getAllList")
             if (result) {
-                console.log("step3 getAllList")
-                setWorkList(result.filter(item => item.workStatus === 0));
-                console.log(result);
-                // 전체 목록 페이지로 이동 추가
+                return result.filter(item => item.workStatus === 0);
             } else {
-                console.log("step4 getAllList")
                 alert('작업 목록을 불러오지 못했습니다.\n해당 탭을 닫은 후 다시 시도해주세요.');
+                return false;
             }
         }
-        async function getWorkCheckList(workID) {
-            return new Promise((resolve, reject) => {
-                resolve(getCheckList(workID));
-            });
-        }
         const getAllWorkWithCheckList = async () => {
-            await Promise.all([getAllList()]).then(async () => {
-                console.log("Step1. workList", workList);
-                const updatedWorkList = await Promise.all(
-                    workList.map(async item => {
-                      const checkList = await getWorkCheckList(item.workID);
-                      console.log("Step2. checkList", JSON.stringify(checkList));
-                      console.log(item.title);
-                      console.log(checkList);
-                      return { ...item, checkList: checkList } 
-                    })
-                );
-                console.log("Step3. updatedWorkList", JSON.stringify(updatedWorkList));
-                console.log('updatedWorkList');
-                console.log(updatedWorkList);               
+            setIsLoading(false);      
+            await Promise.all([getAllList()]).then(async (value) => {
+                const [json] = value;
+                await Promise.all(
+                    json.map(async item => {
+                    const checkList = await getCheckList(item.workID);
+                    return { ...item, checklist: checkList } 
+                })).then((response) => {
+                    setWorkList(response);
+                    setIsLoading(true);       
+                }).catch((e) => {
+                    alert('등록된 일거리 목록을 불러오지 못했습니다.\n해당 탭을 닫은 후 다시 시도해주세요.');
+                    setIsLoading(true);                    
+                })
             })
-            
-            // await getAllList();
-            // console.log("Step1. workList", workList);
-            // const updatedWorkList = await Promise.all(
-            //     workList.map(async item => {
-            //       const checkList = await getWorkCheckList(item.workID);
-            //       console.log("Step2. checkList", JSON.stringify(checkList));
-            //       console.log(item.title);
-            //       console.log(checkList);
-            //       return { ...item, checkList: checkList } 
-            //     })
-            // );
-            // console.log("Step3. updatedWorkList", JSON.stringify(updatedWorkList));
-            // console.log('updatedWorkList');
-            // console.log(updatedWorkList);
         }
-        getAllWorkWithCheckList();
         if (id) {
             dispatch(userAction.isLogin(id));
         }
+        getAllWorkWithCheckList();
     }, []);
     return (
+        isLoading &&
         <Template
             isLoggedIn={isLoggedIn}
             userId={userId}
             handleLogout={handleLogout}
         >
-            <WorkTemplate
-                title="등록된 일거리"
-                isBorder={false}
-            >
-                <ListGrid>
-                    {/* {
-                        workList.map(item => {
-                            console.log(item);
-                            return (
-                                <WorkListItem
-                                    title={item.title}
-                                    description={item.description}
-                                    pay={item.pay}
-                                    dueDate={searchDueDate(item.dueDate)} 
-                                    categoryName={searchCategoryName(item.category)}
-                                    checkList={item.checkList}
-                                    onClick={() => applyWork(item.workID, item.title)}
-                                    button="작업 신청"
-                                />
-                            )
-                        })
-                    } */}
-                </ListGrid>
-            </WorkTemplate>
+                <WorkTemplate
+                    title="등록된 일거리"
+                    isBorder={false}
+                >
+                    <ListGrid>
+                        {
+                            workList.map(item => {
+                                return (
+                                    <WorkListItem
+                                        isCheck={false}
+                                        title={item.title}
+                                        description={item.description}
+                                        pay={item.pay}
+                                        dueDate={searchDueDate(item.dueDate)} 
+                                        categoryName={searchCategoryName(item.category)}
+                                        checkList={item.checklist}
+                                        onClick={() => applyWork(item.workID, item.title)}
+                                        button="작업 신청"
+                                    />
+                                )
+                            })
+                        }
+                    </ListGrid>
+                </WorkTemplate>
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}
@@ -154,6 +127,7 @@ const HomeScreen = () => {
                 acceptHandler={requestWork}
             />
         </Template>
+        
     );
 }
 

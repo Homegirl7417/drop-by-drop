@@ -10,5 +10,8 @@ export default async function getEmployerWorkList() {
 
 const getApi = async () => {
     const { data: json } = await api.get(`/mywork-employer`);
-    if(json) return json;
+    if(json) {
+        const deleteWorkID1 = json.filter(item => item.workID !== 1);
+        return deleteWorkID1;
+    }
 }

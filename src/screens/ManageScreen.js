@@ -19,11 +19,14 @@ import putLookOverRequest from '../api/putLookOverRequest';
 import putLookOverAccept from '../api/putLookOverAccept';
 import putLookOverReject from '../api/putLookOverReject';
 import putPayment from  '../api/putPayment';
+import getCheckList from '../api/getCheckList';
+import putCheckStep from '../api/putCheckStep';
 
 const ManageScreen = () => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((store) => store.users.isLoggedIn);
     const userId = useSelector((store) => store.users.id);
+    const [isLoading, setIsLoading] = useState(false);
     const [isSubmit, setIsSubmit] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false); // 지원수락 모달
     const [requestModalIsOpen, setRequestModalIsOpen] = useState(false); // 작업검토신청 모달
@@ -85,7 +88,6 @@ const ManageScreen = () => {
         }
     }
     const handleWorkingItem = async () => {
-        //onClick 1. Employee: 작업 검토 신청 API 2.Employer: 작업 검토 승인 or 거절 API 
         if (!isSubmit) {
             setIsSubmit(true);
             if (userId==="employee1234") {
@@ -162,40 +164,74 @@ const ManageScreen = () => {
             setIsSubmit(false);
         }
     }
+    const handleCheckStep = async (stepID) => {
+        if (!isSubmit) {
+            setIsSubmit(true);
+            const result = await putCheckStep(stepID);
+            if (result) {
+                alert(`체크리스트가 업데이트되었습니다.`);
+                window.location.reload();
+            } else {
+                alert(`체크리스트 업데이트 중 오류가 발생했습니다.\n해당 탭을 닫고 다시 시도해주세요.`);
+                window.location.reload();
+            }
+            setIsSubmit(false);
+        }
+    }
     useEffect(() => {
         const id = sessionStorage.getItem('id');
         const getEmployerList = async () => {
-            const result = await getEmployerWorkList();
-            if (result) {
-                setRegisteredList(result.filter(item => item.workStatus === 0));
-                setWorkingList(result.filter(item => item.workStatus === 1 || item.workStatus === 4));
-                setWorkedList(result.filter(item => item.workStatus === 2));
-                setRequesetList(result.filter(item => item.workStatus === 3));
-                setCompletedList(result.filter(item => item.workStatus === 5));
-            } else {
-                alert('등록한 일거리 목록을 불러오지 못했습니다.\n해당 탭을 닫은 후 다시 시도해주세요.');
-            }
+            setIsLoading(false);  
+            await Promise.all([getEmployerWorkList()]).then(async (value) => {
+                const [json] = value;
+                await Promise.all(
+                    json.map(async item => {
+                    const checkList = await getCheckList(item.workID);
+                    return { ...item, checklist: checkList } 
+                })).then((response) => {
+                    setRegisteredList(response.filter(item => item.workStatus === 0));
+                    setWorkingList(response.filter(item => item.workStatus === 1 || item.workStatus === 4));
+                    setWorkedList(response.filter(item => item.workStatus === 2));
+                    setRequesetList(response.filter(item => item.workStatus === 3));
+                    setCompletedList(response.filter(item => item.workStatus === 5));
+                    setIsLoading(true);       
+                }).catch((e) => {
+                    alert('등록한 일거리 목록을 불러오지 못했습니다.\n해당 탭을 닫은 후 다시 시도해주세요.');
+                    setIsLoading(true);
+                })
+            })
         }
         const getEmployeeList = async () => {
-            const result = await getEmployeeWorkList();
-            if (result) {
-                setRegisteredList(result.filter(item => item.workStatus === 0)); //Employee는 등록한 일거리 사용X.
-                setWorkingList(result.filter(item => item.workStatus === 1 || item.workStatus === 4)); // 진행중인 작업, 검토 요청 작업. 사용O.2
-                setWorkedList(result.filter(item => item.workStatus === 2)); // Employee가 검토 승인 받고 보수 지급버튼을 눌러야하는 일거리 사용O. 3. 
-                setRequesetList(result.filter(item => item.workStatus === 3)); // Employee가 지원한 일거리 사용O. 1. 
-                setCompletedList(result.filter(item => item.workStatus === 5)); // Employee가 완료한 일거리 사용O. 4. 
-                console.log(workedList);
-            } else {
-                alert('등록된 일거리 목록을 불러오지 못했습니다.\n해당 탭을 닫은 후 다시 시도해주세요.');
-            }
+            setIsLoading(false);  
+            await Promise.all([getEmployeeWorkList()]).then(async (value) => {
+                const [json] = value;
+                await Promise.all(
+                    json.map(async item => {
+                    const checkList = await getCheckList(item.workID);
+                    return { ...item, checklist: checkList } 
+                })).then((response) => {
+                    setWorkingList(response.filter(item => item.workStatus === 1 || item.workStatus === 4));
+                    setWorkedList(response.filter(item => item.workStatus === 2));
+                    setRequesetList(response.filter(item => item.workStatus === 3));
+                    setCompletedList(response.filter(item => item.workStatus === 5));
+                    setIsLoading(true);       
+                }).catch((e) => {
+                    alert('등록한 일거리 목록을 불러오지 못했습니다.\n해당 탭을 닫은 후 다시 시도해주세요.');
+                    setIsLoading(true);
+                })
+            })
         }
         if (id) {
             dispatch(userAction.isLogin(id));
-            id === 'employer1234' && getEmployerList();
-            id === 'employee1234' && getEmployeeList();
+            if (id === 'employer1234') {
+                getEmployerList();
+            } else {
+                getEmployeeList();
+            }
         }
     }, []);
     return (
+        isLoading &&
         <Template
             isLoggedIn={isLoggedIn}
             userId={userId}
@@ -235,12 +271,14 @@ const ManageScreen = () => {
                         {requestList.map(item => {
                             return (
                                 <WorkListItem
+                                    isCheck={false}
                                     title={item.title}
                                     description={item.description}
                                     pay={item.pay}
                                     dueDate={searchDueDate(item.dueDate)} 
                                     categoryName={searchCategoryName(item.category)}
                                     nickName={'노동자'}
+                                    checkList={item.checklist}
                                 />                        
                             )
                         })}
@@ -277,6 +315,8 @@ const ManageScreen = () => {
                     {workingList.map(item => {
                         return (
                             <WorkListItem
+                                workID={item.workID}
+                                isCheck={true}
                                 isDisabled={
                                     userId === "employee1234"
                                     ? item.workStatus === 1
@@ -292,7 +332,9 @@ const ManageScreen = () => {
                                 dueDate={searchDueDate(item.dueDate)} 
                                 categoryName={searchCategoryName(item.category)}
                                 nickName={'노동자'}
+                                checkList={item.checklist}
                                 onClick={() => handleLookOverModal(item.workID, item.title)}
+                                onClickCheck={handleCheckStep}
                                 button={
                                     userId === "employee1234" 
                                     ? item.workStatus === 1
@@ -315,12 +357,14 @@ const ManageScreen = () => {
                     {workedList.map(item => {
                         return (
                             <WorkListItem
+                                isCheck={false}
                                 title={item.title}
                                 description={item.description}
                                 pay={item.pay}
                                 dueDate={searchDueDate(item.dueDate)} 
                                 categoryName={searchCategoryName(item.category)}
                                 nickName={'노동자'}
+                                checkList={item.checklist}
                                 onClick={() => handlePayment(item.workID, item.title)}
                                 button={
                                     userId === "employee1234"
@@ -340,12 +384,14 @@ const ManageScreen = () => {
                     {completedList.map(item => {
                         return (
                             <WorkListItem
+                                isCheck={false}
                                 title={item.title}
                                 description={item.description}
                                 pay={item.pay}
                                 dueDate={searchDueDate(item.dueDate)} 
                                 categoryName={searchCategoryName(item.category)}
                                 nickName={'노동자'}
+                                checkList={item.checklist}
                                 onClick={() => alert('작업 검토 완료 API 연결하고 WorkListItem 디자인 변경하기')}
                             />                        
                         )

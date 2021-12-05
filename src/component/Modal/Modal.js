@@ -6,7 +6,7 @@ const Modal = ({ isOpen, onRequestClose, title='', subtitle='', description='', 
     return (
       <ReactModal
         isOpen={isOpen}
-        onRequestClose={onRequestClose}
+        // onRequestClose={onRequestClose}
         style={ModalStyles}
       >
         <ModalContent>

@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
-    const [currentRoute, setCurrentRoute] = useState(0);
-    const [path, setPath] = useState('/'); 
-    // const { pathname } = useLocation();
-    // console.log("hell" + pathname);
-    // setPath(pathname);
     const navigation = [
         {   
             index: 0,
@@ -32,29 +27,6 @@ const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
             func: () => alert('티끌 시스템 및 서비스 이용에 관련해서 문의사항이 있으신가요?\n문의사항은 hk7417@ajou.ac.kr로 부탁드립니다.')
         }
     ];
-    useEffect(() => {
-        // console.log('hi2222'+path);
-        // const detectIndex = (index) => {
-        //     let currentIndex = 0;
-        //     switch (index){
-        //         case '/': 
-        //             currentIndex = 0;
-        //             break; 
-        //         case '/register/work':
-        //             currentIndex = 1;
-        //             break;
-        //         case '/manage/work':
-        //             currentIndex = 2;
-        //             break;
-        //         default:
-        //             currentIndex = 100;
-        //             break; 
-        //     }
-        //     setCurrentRoute(currentIndex);
-        // }
-        // console.log('hi2222'+path);
-        // detectIndex(path);
-    }, []);
     return (
         <HeaderContainer>
             <LogoSection>
@@ -77,7 +49,6 @@ const Header = ({ isLoggedIn=false, userId='', handleLogout }) => {
                             <NavigationTitle
                                 to={item.path}
                                 index={item.index}
-                                current={currentRoute}
                             >
                                 {item.title}
                             </NavigationTitle>
@@ -151,8 +122,6 @@ const NavigationAlert = styled.div`
     cursor: pointer;
 `
 
-// border-bottom: ${props => props.index === props.current ? '3px solid orange' : 'none'};
-// color: ${props => props.index === props.current ? 'orange' : 'black'};
 const NavigationTitle = styled(Link)`
     font-size: 18px;
     cursor: pointer;

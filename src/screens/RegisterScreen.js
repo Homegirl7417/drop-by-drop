@@ -99,16 +99,12 @@ const RegisterScreen = () => {
             setIsSubmit(true);
             const valid = checkValid();
             if (valid) {
-                console.log("step1 postWorkForm")
                 const result = await postWorkForm(title, description, pay*1, category, dueDate, checkList);
-                console.log("step2 postWorkForm")
                 if (result) {
-                    console.log("step3 postWorkForm")
                     alert('작업 등록이 완료되었습니다.');
                     window.history.pushState('', '', '/');
                     window.location.reload();
                 } else {
-                    console.log("step4 postWorkForm")
                     alert('작업이 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주시길 바랍니다.');
                 }
             }
@@ -173,34 +169,34 @@ const RegisterScreen = () => {
                     type={"checkList"}
                     title={'Todo CheckList'}
                     placeholder="1.체크리스트 타이틀(20자 이내)"
-                    placeholderDetail="1.체크리스트 상세 설명(30자 이내)"
+                    placeholderDetail="1.체크리스트 상세 설명(40자 이내)"
                     kind='text'
                     description={checkList[0].title}
                     descriptionDetail={checkList[0].description}
                     onChange={(event) => handleCheckList(1, true, 20, event)}
-                    onChangeDetail={(event) => handleCheckList(1, false, 30, event)}
+                    onChangeDetail={(event) => handleCheckList(1, false, 40, event)}
                 />
                 <WorkRegisterItem
                     type={"checkList"}
                     isTitle={false}
                     placeholder="2.체크리스트 타이틀(20자 이내)"
-                    placeholderDetail="2.체크리스트 상세 설명(30자 이내)"
+                    placeholderDetail="2.체크리스트 상세 설명(40자 이내)"
                     kind='text'
                     description={checkList[1].title}
                     descriptionDetail={checkList[1].description}
                     onChange={(event) => handleCheckList(2, true, 20, event)}
-                    onChangeDetail={(event) => handleCheckList(2, false, 30, event)}
+                    onChangeDetail={(event) => handleCheckList(2, false, 40, event)}
                 />
                 <WorkRegisterItem
                     type={"checkList"}
                     isTitle={false}
                     placeholder="3.체크리스트 타이틀(20자 이내)"
-                    placeholderDetail="3.체크리스트 상세 설명(30자 이내)"
+                    placeholderDetail="3.체크리스트 상세 설명(40자 이내)"
                     kind='text'
                     description={checkList[2].title}
                     descriptionDetail={checkList[2].description}
                     onChange={(event) => handleCheckList(3, true, 20, event)}
-                    onChangeDetail={(event) => handleCheckList(3, false, 30,event)}
+                    onChangeDetail={(event) => handleCheckList(3, false, 40,event)}
                 />
                 <WorkRegisterItem
                     title={'작업 완료 기간(YYYY-MM-DD)'}

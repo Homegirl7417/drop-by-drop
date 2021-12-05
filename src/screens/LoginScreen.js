@@ -56,6 +56,7 @@ const LoginScreen = ( ) => {
                 </LogoSection>
                 <LoginSection>
                     <WorkRegisterItem 
+                        type={'login'}
                         isTitle={false} 
                         description={id} 
                         placeholder="아이디" 
@@ -63,6 +64,7 @@ const LoginScreen = ( ) => {
                         onChange={handleId}
                     />
                     <WorkRegisterItem 
+                        type={'login'}
                         isTitle={false} 
                         description={password} 
                         placeholder="비밀번호" 
@@ -101,8 +103,8 @@ const Container = styled.div`
 
 const InnerContainer = styled.div`
     min-width: 600px;
-    height: 400px;
-    top: 40%;
+    height: 300px;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     position: absolute;
@@ -118,7 +120,9 @@ const LogoSection = styled.div`
     align-items: center;
     display: flex;
 `
-const LoginSection = styled.div``
+const LoginSection = styled.div`
+    margin-top: 50px;
+`
 
 const ButtonSection = styled.div`
     display: flex;

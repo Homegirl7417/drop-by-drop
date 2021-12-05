@@ -28,7 +28,7 @@ const WorkRegisterItem = (
         placeholderDetail=""
     }) => {
     return (
-        <Container>
+        <Container type={type}>
             {
                 isTitle && 
                 <Title>
@@ -73,7 +73,7 @@ const WorkRegisterItem = (
 export default WorkRegisterItem;
 
 const Container = styled.div`
-    margin: 40px 0px;
+    margin: ${props => props.type === 'login' ? '10px 0px' : '40px 0px'};
 `
 
 const Title = styled.div`

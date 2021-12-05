@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import TodoItem from './TodoItem';
+import correctCheckTitle from '../../utils/correctCheckTitle';
+import correctCheckDescription from '../../utils/correctCheckDescription';
+import correctIsChecked from '../../utils/correctIsChecked';
 
-const WorkListItem = ({ isDisabled=false, isBorder=true, title='', description='', pay=null, dueDate='', categoryName, checkList, onClick=null, button="", isCheck, check, onClickCheck }) => {
-    console.log(`WorkListItem ${checkList}`);
+const WorkListItem = ({ isDisabled=false, isBorder=true, title='', description='', pay=null, dueDate='', categoryName, checkList, onClick=null, button="", isCheck, onClickCheck }) => {
     return (
         <Container isBorder={isBorder}>
             <CategorySection>
@@ -21,29 +23,41 @@ const WorkListItem = ({ isDisabled=false, isBorder=true, title='', description='
             </WorkInfoSection>
             <TodoSection>
                 <Title>
-                    Todo CheckList
+                    Todo CheckList 
                 </Title> 
                 <TodoItem
-                    title={checkList[0].title === null ? '널' : checkList[0].title}
-                    description={checkList[0].description ? '널' : checkList[0].description}
+                    title={'1. '+ correctCheckTitle(checkList,0)}
+                    description={correctCheckDescription(checkList,0)}
                     isCheck={isCheck} 
-                    check={checkList[0].isChecked}
-                    onClickCheck={onClickCheck}
+                    checked={isCheck ? correctIsChecked(checkList,0) : false}
+                    onClickCheck={
+                        correctIsChecked(checkList,0) 
+                        ? null
+                        : () => onClickCheck(checkList[0].stepID)
+                    }
                 />
                 <TodoItem
-                    title={checkList[1].title}
-                    description={checkList[1].description}
+                    title={'2. '+ correctCheckTitle(checkList,1)}
+                    description={correctCheckDescription(checkList,1)}
                     isCheck={isCheck} 
-                    check={checkList[1].isChecked}
-                    onClickCheck={onClickCheck}
+                    checked={isCheck ? correctIsChecked(checkList,1) : false}
+                    onClickCheck={
+                        correctIsChecked(checkList,1) 
+                        ? null
+                        : () => onClickCheck(checkList[1].stepID)
+                    }
                 />
                 <TodoItem
-                    title={checkList[2].title}
-                    description={checkList[2].description}
+                    title={'3. '+ correctCheckTitle(checkList,2)}
+                    description={correctCheckDescription(checkList,2)}
                     isCheck={isCheck} 
-                    check={checkList[2].isChecked}
-                    onClickCheck={onClickCheck}
-                />      
+                    checked={isCheck ? correctIsChecked(checkList,2) : false}
+                    onClickCheck={
+                        correctIsChecked(checkList,2) 
+                        ? null
+                        : () => onClickCheck(checkList[2].stepID)
+                    }
+                />
             </TodoSection>
             <WorkSection>
                 <DueDate>{dueDate}</DueDate>
@@ -95,7 +109,7 @@ const WorkSection = styled.div`
     padding-top: 15px;
 `
 const WorkInfoSection = styled.div`
-
+    min-height: 80px;
 `
 
 const WorkDetailSection = styled.div`
