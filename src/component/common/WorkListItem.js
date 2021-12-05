@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import TodoItem from './TodoItem';
 
-const WorkListItem = ({ isDisabled=false, isBorder=true, title='', description='', pay=null, dueDate='', categoryName, onClick=null, button="", isCheck, check, onClickCheck }) => {
+const WorkListItem = ({ isDisabled=false, isBorder=true, title='', description='', pay=null, dueDate='', categoryName, checkList, onClick=null, button="", isCheck, check, onClickCheck }) => {
+    console.log(`WorkListItem ${checkList}`);
     return (
         <Container isBorder={isBorder}>
             <CategorySection>
@@ -23,24 +24,24 @@ const WorkListItem = ({ isDisabled=false, isBorder=true, title='', description='
                     Todo CheckList
                 </Title> 
                 <TodoItem
-                    title={"1. 이미지 파일 수령"}
-                    description={"hk7417로 연락주세요."}
+                    title={checkList[0].title === null ? '널' : checkList[0].title}
+                    description={checkList[0].description ? '널' : checkList[0].description}
                     isCheck={isCheck} 
-                    check={check}
+                    check={checkList[0].isChecked}
                     onClickCheck={onClickCheck}
                 />
                 <TodoItem
-                    title={"1. 이미지 파일 수령"}
-                    description={"hk7417로 연락주세요."}
+                    title={checkList[1].title}
+                    description={checkList[1].description}
                     isCheck={isCheck} 
-                    check={check}
+                    check={checkList[1].isChecked}
                     onClickCheck={onClickCheck}
                 />
                 <TodoItem
-                    title={"1. 이미지 파일 수령"}
-                    description={"hk7417로 연락주세요."}
+                    title={checkList[2].title}
+                    description={checkList[2].description}
                     isCheck={isCheck} 
-                    check={check}
+                    check={checkList[2].isChecked}
                     onClickCheck={onClickCheck}
                 />      
             </TodoSection>

@@ -10,6 +10,7 @@ import putRequestWork from '../api/putRequestWork';
 import Modal from '../component/Modal';
 import searchDueDate from '../utils/searchDueDate';
 import searchCategoryName from '../utils/searchCategoryName';
+import getCheckList from '../api/getCheckList';
 
 const HomeScreen = () => {
     const dispatch = useDispatch();
@@ -38,9 +39,6 @@ const HomeScreen = () => {
             setApplyWorkID(workID);
             setModalTitle(title);
             setModalIsOpen(true);
-            // if(window.confirm('해당 작업을 신청하시겠습니까?') === true) {
-            //     requestWork(workID);
-            // } 여기부터 다시
         } else {
             alert("작업 신청을 원하신다면 Employee로 로그인해주세요.")
         }
@@ -74,7 +72,44 @@ const HomeScreen = () => {
                 alert('작업 목록을 불러오지 못했습니다.\n해당 탭을 닫은 후 다시 시도해주세요.');
             }
         }
-        getAllList(); 
+        async function getWorkCheckList(workID) {
+            return new Promise((resolve, reject) => {
+                resolve(getCheckList(workID));
+            });
+        }
+        const getAllWorkWithCheckList = async () => {
+            await Promise.all([getAllList()]).then(async () => {
+                console.log("Step1. workList", workList);
+                const updatedWorkList = await Promise.all(
+                    workList.map(async item => {
+                      const checkList = await getWorkCheckList(item.workID);
+                      console.log("Step2. checkList", JSON.stringify(checkList));
+                      console.log(item.title);
+                      console.log(checkList);
+                      return { ...item, checkList: checkList } 
+                    })
+                );
+                console.log("Step3. updatedWorkList", JSON.stringify(updatedWorkList));
+                console.log('updatedWorkList');
+                console.log(updatedWorkList);               
+            })
+            
+            // await getAllList();
+            // console.log("Step1. workList", workList);
+            // const updatedWorkList = await Promise.all(
+            //     workList.map(async item => {
+            //       const checkList = await getWorkCheckList(item.workID);
+            //       console.log("Step2. checkList", JSON.stringify(checkList));
+            //       console.log(item.title);
+            //       console.log(checkList);
+            //       return { ...item, checkList: checkList } 
+            //     })
+            // );
+            // console.log("Step3. updatedWorkList", JSON.stringify(updatedWorkList));
+            // console.log('updatedWorkList');
+            // console.log(updatedWorkList);
+        }
+        getAllWorkWithCheckList();
         if (id) {
             dispatch(userAction.isLogin(id));
         }
@@ -90,8 +125,9 @@ const HomeScreen = () => {
                 isBorder={false}
             >
                 <ListGrid>
-                    {
+                    {/* {
                         workList.map(item => {
+                            console.log(item);
                             return (
                                 <WorkListItem
                                     title={item.title}
@@ -99,12 +135,13 @@ const HomeScreen = () => {
                                     pay={item.pay}
                                     dueDate={searchDueDate(item.dueDate)} 
                                     categoryName={searchCategoryName(item.category)}
+                                    checkList={item.checkList}
                                     onClick={() => applyWork(item.workID, item.title)}
                                     button="작업 신청"
                                 />
                             )
                         })
-                    }
+                    } */}
                 </ListGrid>
             </WorkTemplate>
             <Modal

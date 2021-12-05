@@ -11,11 +11,29 @@ const RegisterScreen = () => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((store) => store.users.isLoggedIn);
     const userId = useSelector((store) => store.users.id);
+    const [isSubmit, setIsSubmit] = useState(false);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState(0);
     const [pay, setPay] = useState('');
     const [dueDate, setDueDate] = useState('');
+    const [checkList, setCheckList] = useState([
+        {
+            checkIndex: 1, 
+            title: "",
+            description: ""
+        },
+        {
+            checkIndex: 2, 
+            title: "",
+            description: ""
+        },
+        {
+            checkIndex: 3, 
+            title: "",
+            description: ""
+        }
+    ]);
     const handleTitle = event => {
         const {
           target: { value },
@@ -43,17 +61,58 @@ const RegisterScreen = () => {
         } = event;
         setDueDate(value);
     };
-    const registerForm = async () => {
-        console.log("step1")
-        const result = await postWorkForm(title, description, pay*1, category, dueDate);
-        console.log("step2")
-        if (result) {
-            console.log("step3")
-            alert('작업 등록이 완료되었습니다.');
-            // 전체 목록 페이지로 이동 추가
+    const handleCheckList = (checkIndex, isTitle, limit, event) => {
+        const {
+          target: { value },
+        } = event;
+        value.length <= limit && setCheckList(
+            checkList.map(checkitem =>
+                checkitem.checkIndex === checkIndex 
+                ? isTitle
+                  ? { ...checkitem, title: value } 
+                  : { ...checkitem, description: value } 
+                : checkitem
+            )
+        );
+    };
+    const checkValid = () => {
+        if (
+            title.length === 0 || 
+            description.length === 0 || 
+            pay.length === 0 || 
+            dueDate.length === 0 ||
+            checkList[0].title.length === 0 || 
+            checkList[1].title.length === 0 || 
+            checkList[2].title.length === 0 ||        
+            checkList[0].description.length === 0 ||        
+            checkList[1].description.length === 0 ||        
+            checkList[2].description.length === 0             
+        ) {
+            alert('작업 등록의 모든 항목을 채워주세요.');
+            return false;
         } else {
-            console.log("step4")
-            alert('작업이 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주시길 바랍니다.');
+            return true;
+        }
+    }
+    const registerForm = async () => {
+        if (!isSubmit) {
+            setIsSubmit(true);
+            const valid = checkValid();
+            if (valid) {
+                console.log("step1 postWorkForm")
+                const result = await postWorkForm(title, description, pay*1, category, dueDate, checkList);
+                console.log("step2 postWorkForm")
+                if (result) {
+                    console.log("step3 postWorkForm")
+                    alert('작업 등록이 완료되었습니다.');
+                    window.history.pushState('', '', '/');
+                    window.location.reload();
+                } else {
+                    console.log("step4 postWorkForm")
+                    alert('작업이 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주시길 바랍니다.');
+                }
+            }
+            setIsSubmit(false);
         }
     }
     const handleLogout = async () => {
@@ -109,6 +168,39 @@ const RegisterScreen = () => {
                     kind='text'
                     description={pay}
                     onChange={handlePay}
+                />
+                <WorkRegisterItem
+                    type={"checkList"}
+                    title={'Todo CheckList'}
+                    placeholder="1.체크리스트 타이틀(20자 이내)"
+                    placeholderDetail="1.체크리스트 상세 설명(30자 이내)"
+                    kind='text'
+                    description={checkList[0].title}
+                    descriptionDetail={checkList[0].description}
+                    onChange={(event) => handleCheckList(1, true, 20, event)}
+                    onChangeDetail={(event) => handleCheckList(1, false, 30, event)}
+                />
+                <WorkRegisterItem
+                    type={"checkList"}
+                    isTitle={false}
+                    placeholder="2.체크리스트 타이틀(20자 이내)"
+                    placeholderDetail="2.체크리스트 상세 설명(30자 이내)"
+                    kind='text'
+                    description={checkList[1].title}
+                    descriptionDetail={checkList[1].description}
+                    onChange={(event) => handleCheckList(2, true, 20, event)}
+                    onChangeDetail={(event) => handleCheckList(2, false, 30, event)}
+                />
+                <WorkRegisterItem
+                    type={"checkList"}
+                    isTitle={false}
+                    placeholder="3.체크리스트 타이틀(20자 이내)"
+                    placeholderDetail="3.체크리스트 상세 설명(30자 이내)"
+                    kind='text'
+                    description={checkList[2].title}
+                    descriptionDetail={checkList[2].description}
+                    onChange={(event) => handleCheckList(3, true, 20, event)}
+                    onChangeDetail={(event) => handleCheckList(3, false, 30,event)}
                 />
                 <WorkRegisterItem
                     title={'작업 완료 기간(YYYY-MM-DD)'}

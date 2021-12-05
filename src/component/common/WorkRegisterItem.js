@@ -13,7 +13,20 @@ const CategoryList = ({onChange, category}) => {
         </CategorySection>
     );
 }
-const WorkRegisterItem = ({isTitle=true, title, description, kind = 'text', onChange, category, placeholder}) => {
+const WorkRegisterItem = (
+    {
+        type="normal", 
+        isTitle=true, 
+        title, 
+        description=null, 
+        descriptionDetail=null, 
+        kind = 'text', 
+        onChange=null, 
+        onChangeDetail=null, 
+        category, 
+        placeholder="", 
+        placeholderDetail=""
+    }) => {
     return (
         <Container>
             {
@@ -28,13 +41,30 @@ const WorkRegisterItem = ({isTitle=true, title, description, kind = 'text', onCh
                     category={category}
                     onChange={onChange}
                 />
-                : <Description 
-                    type="text" 
-                    kind={kind}
-                    value={description} 
-                    onChange={onChange}
-                    placeholder={placeholder}
-                />
+                : type === 'checkList'
+                    ? <div>
+                        <Description 
+                            type="text" 
+                            kind={kind}
+                            value={description} 
+                            onChange={onChange}
+                            placeholder={placeholder}
+                        />
+                        <Description 
+                            type="text" 
+                            kind={kind}
+                            value={descriptionDetail} 
+                            onChange={onChangeDetail}
+                            placeholder={placeholderDetail}
+                        />
+                    </div>
+                    : <Description 
+                        type="text" 
+                        kind={kind}
+                        value={description} 
+                        onChange={onChange}
+                        placeholder={placeholder}
+                    />
             }
         </Container>
     );
@@ -59,14 +89,16 @@ const Title = styled.div`
 const Description = styled.textarea`
     width: 600px;
     height: ${props => props.kind === 'desc' ? '100px' : '30px'};
-    padding: 20px;
+    padding: 10px;
     text-align: left;
     border: 1px solid #E1F5FE;
     border-radius: 20px;
     background-color: #E1F5FE;
     font-size: 16px;
+    line-height: 30px;
     color: black;
     resize: none;
+    margin-bottom: 10px;
 `
 
 const CategorySection = styled.div`
