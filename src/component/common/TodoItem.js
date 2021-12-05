@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const TodoItem = ({ 
     isCheck=false, 
+    isCheckDisabled=false,
     title="", 
     description="", 
     checked, 
@@ -16,7 +17,7 @@ const TodoItem = ({
                 </TodoItemTitle>
                 {
                     isCheck &&
-                    <TodoItemCheck type="radio" checked={checked} onClick={onClickCheck}/>
+                    <TodoItemCheck type="radio" checked={checked} disabled={isCheckDisabled} onClick={onClickCheck}/>
                 }
             </TitleSection>
             <TodoItemDescription>

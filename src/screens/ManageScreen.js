@@ -328,6 +328,11 @@ const ManageScreen = () => {
                                         ? true
                                         : false
                                 }
+                                isCheckDisabled={
+                                    userId === "employee1234"
+                                    ? false
+                                    : true
+                                }
                                 title={item.title}
                                 description={item.description}
                                 pay={item.pay}

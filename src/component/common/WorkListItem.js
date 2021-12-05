@@ -6,6 +6,7 @@ import correctCheckDescription from '../../utils/correctCheckDescription';
 import correctIsChecked from '../../utils/correctIsChecked';
 
 const WorkListItem = ({ 
+    isCheckDisabled=false,
     isDisabled=false, 
     isBorder=true, 
     title='', 
@@ -39,6 +40,7 @@ const WorkListItem = ({
                     Todo CheckList 
                 </Title> 
                 <TodoItem
+                    isCheckDisabled={isCheckDisabled}
                     title={'1. '+ correctCheckTitle(checkList,0)}
                     description={correctCheckDescription(checkList,0)}
                     isCheck={isCheck} 
@@ -50,6 +52,7 @@ const WorkListItem = ({
                     }
                 />
                 <TodoItem
+                    isCheckDisabled={isCheckDisabled}
                     title={'2. '+ correctCheckTitle(checkList,1)}
                     description={correctCheckDescription(checkList,1)}
                     isCheck={isCheck} 
@@ -61,6 +64,7 @@ const WorkListItem = ({
                     }
                 />
                 <TodoItem
+                    isCheckDisabled={isCheckDisabled}
                     title={'3. '+ correctCheckTitle(checkList,2)}
                     description={correctCheckDescription(checkList,2)}
                     isCheck={isCheck} 
