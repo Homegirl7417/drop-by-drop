@@ -367,7 +367,7 @@ const ManageScreen = () => {
                                 checkList={item.checklist}
                                 onClick={() => handlePayment(item.workID, item.title)}
                                 button={
-                                    userId === "employee1234"
+                                    userId === "employer1234"
                                     ? "보수 지급"
                                     : null
                                 }
