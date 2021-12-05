@@ -5,7 +5,20 @@ import correctCheckTitle from '../../utils/correctCheckTitle';
 import correctCheckDescription from '../../utils/correctCheckDescription';
 import correctIsChecked from '../../utils/correctIsChecked';
 
-const WorkListItem = ({ isDisabled=false, isBorder=true, title='', description='', pay=null, dueDate='', categoryName, checkList, onClick=null, button="", isCheck, onClickCheck }) => {
+const WorkListItem = ({ 
+    isDisabled=false, 
+    isBorder=true, 
+    title='', 
+    description='', 
+    pay=null, 
+    dueDate='', 
+    categoryName, 
+    checkList, 
+    onClick=null, 
+    button="", 
+    isCheck, 
+    onClickCheck
+}) => {
     return (
         <Container isBorder={isBorder}>
             <CategorySection>

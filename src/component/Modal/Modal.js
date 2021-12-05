@@ -2,11 +2,20 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
 
-const Modal = ({ isOpen, onRequestClose, title='', subtitle='', description='', isCancleText=true, cancleText='취소', acceptText='수락', cancleHandler, acceptHandler }) => {
+const Modal = ({ 
+    isOpen, 
+    title='', 
+    subtitle='', 
+    description='', 
+    isCancleText=true, 
+    cancleText='취소', 
+    acceptText='수락', 
+    cancleHandler, 
+    acceptHandler 
+}) => {
     return (
       <ReactModal
         isOpen={isOpen}
-        // onRequestClose={onRequestClose}
         style={ModalStyles}
       >
         <ModalContent>

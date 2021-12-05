@@ -121,7 +121,6 @@ const HomeScreen = () => {
                 </WorkTemplate>
             <Modal
                 isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)}
                 title={modalTitle}
                 subtitle="작업을 신청하시겠습니까?"
                 acceptText="신청"

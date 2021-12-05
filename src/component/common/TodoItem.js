@@ -1,7 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const TodoItem = ({ isCheck=false, title="", description="", checked, onClickCheck=null }) => {
+const TodoItem = ({ 
+    isCheck=false, 
+    title="", 
+    description="", 
+    checked, 
+    onClickCheck=null 
+}) => {
     return (
         <TodoItemSection>
             <TitleSection>

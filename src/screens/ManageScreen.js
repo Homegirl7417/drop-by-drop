@@ -247,12 +247,14 @@ const ManageScreen = () => {
                         {requestList.map(item => {
                             return (
                                 <RequestWorkItem
+                                    isCheck={false}
                                     title={item.title}
                                     description={item.description}
                                     pay={item.pay}
                                     dueDate={searchDueDate(item.dueDate)} 
                                     categoryName={searchCategoryName(item.category)}
                                     nickName={'노동자'}
+                                    checkList={item.checklist}
                                     rejectHandler={() => handleRejectButton(item.workID, item.title)}
                                     acceptHandler={() => handleAcceptButton(item.workID, item.title)}
                                 />                        
@@ -400,7 +402,6 @@ const ManageScreen = () => {
             </WorkTemplate>
             <Modal
                 isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)}
                 title={modalTitle}
                 subtitle={`에 대한 노동자님 지원을 수락하시겠습니까?`}
                 description="수락시 보수 지급을 위한 결제가 진행됩니다."
@@ -410,7 +411,6 @@ const ManageScreen = () => {
             />
             <Modal
                 isOpen={requestModalIsOpen}
-                onRequestClose={() => setRequestModalIsOpen(false)}
                 title={modalTitle}
                 subtitle={`에 대한 작업 완료 신청을 하시겠습니까?`}
                 description={`작업 완료 신청 후 취소가 되지 않으니\n체크리스트가 모두 완료되었는지 확인해주세요.`}
@@ -420,7 +420,6 @@ const ManageScreen = () => {
             />
             <Modal
                 isOpen={acceptModalIsOpen}
-                onRequestClose={() => setAcceptModalIsOpen(false)}
                 title={modalTitle}
                 subtitle={`에 대한 작업 검토를 완료하시겠습니까?`}
                 description={`수락 시 일이 종료되어 추가적인 검토는 불가합니다.\n보수 지급 버튼을 눌러주셔야 보수가 지급됩니다.`}
@@ -431,7 +430,6 @@ const ManageScreen = () => {
             />
             <Modal
                 isOpen={paymentModalIsOpen}
-                onRequestClose={() => setPaymentModalIsOpen(false)}
                 title={modalTitle}
                 subtitle={`보수 지급이 완료되었습니다.`}
                 description={`티끌 서비스를 이용해주셔서 감사합니다!\n문의: hk7417@ajou.ac.kr`}

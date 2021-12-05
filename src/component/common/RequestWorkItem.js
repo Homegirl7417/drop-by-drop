@@ -1,18 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import WorkListItem from './WorkListItem';
 import ProfileImage from '../../image/profileImage1.png';
 
-const RequestWorkItem = ({ title, description, pay, dueDate, categoryName, nickName, rejectHandler, acceptHandler }) => {
+const RequestWorkItem = ({ 
+    isCheck, 
+    checkList, 
+    title, 
+    description, 
+    pay, 
+    dueDate, 
+    categoryName, 
+    nickName, 
+    rejectHandler, 
+    acceptHandler
+}) => {
     return (
         <Container>
             <WorkSection>
                 <WorkListItem
+                    isCheck={isCheck}
                     title={title}
                     description={description}
                     pay={pay}
                     dueDate={dueDate} 
-                    categoryName={categoryName}                 
+                    categoryName={categoryName}    
+                    checkList={checkList}             
                 />
             </WorkSection>
             <ApplySection>
