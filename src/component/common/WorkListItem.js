@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import TodoItem from './TodoItem';
 
-const WorkListItem = ({ isBorder=true, title='', description='', pay=null, dueDate='', categoryName, onClick=null, button="", isCheck, check, onClickCheck }) => {
+const WorkListItem = ({ isDisabled=false, isBorder=true, title='', description='', pay=null, dueDate='', categoryName, onClick=null, button="", isCheck, check, onClickCheck }) => {
     return (
         <Container isBorder={isBorder}>
             <CategorySection>
@@ -50,7 +50,7 @@ const WorkListItem = ({ isBorder=true, title='', description='', pay=null, dueDa
                 {
                     button &&
                     <WorkButtonSection>
-                        <Button onClick={onClick}>{button}</Button>
+                        <Button onClick={isDisabled ? null : onClick} isDisabled={isDisabled}>{button}</Button>
                     </WorkButtonSection>
                 }
             </WorkSection>               
@@ -154,8 +154,8 @@ const Button = styled.div`
     line-height: 40px;
     text-align: center;
     font-size: 14px;
-    background-color: orange;
-    color: white;
+    background-color: ${props => props.isDisabled ? '#E1F5FE' : 'orange'};
+    color: ${props => props.isDisabled ? 'black' : 'white'};
     border-radius: 10px;
-    cursor: pointer;
+    cursor: ${props => props.isDisabled ? 'default' : 'pointer'};
 `

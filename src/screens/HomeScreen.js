@@ -66,7 +66,7 @@ const HomeScreen = () => {
             console.log("step2 getAllList")
             if (result) {
                 console.log("step3 getAllList")
-                setWorkList(result);
+                setWorkList(result.filter(item => item.workStatus === 0));
                 console.log(result);
                 // 전체 목록 페이지로 이동 추가
             } else {
