@@ -423,7 +423,7 @@ const ManageScreen = () => {
                 onRequestClose={() => setAcceptModalIsOpen(false)}
                 title={modalTitle}
                 subtitle={`에 대한 작업 검토를 완료하시겠습니까?`}
-                description={`수락 시 보수가 전달되며\n일이 종료되어 추가적인 검토는 불가합니다.`}
+                description={`수락 시 일이 종료되어 추가적인 검토는 불가합니다.\n보수 지급 버튼을 눌러주셔야 보수가 지급됩니다.`}
                 cancleText="거절"
                 acceptText="수락"
                 cancleHandler={handleRejectWorkingItem}
