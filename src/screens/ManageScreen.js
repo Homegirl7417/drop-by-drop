@@ -18,6 +18,7 @@ import WorkListItem from '../component/common/WorkListItem';
 import putLookOverRequest from '../api/putLookOverRequest';
 import putLookOverAccept from '../api/putLookOverAccept';
 import putLookOverReject from '../api/putLookOverReject';
+import putPayment from  '../api/putPayment';
 
 const ManageScreen = () => {
     const dispatch = useDispatch();
@@ -26,6 +27,8 @@ const ManageScreen = () => {
     const [isSubmit, setIsSubmit] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false); // 지원수락 모달
     const [requestModalIsOpen, setRequestModalIsOpen] = useState(false); // 작업검토신청 모달
+    const [acceptModalIsOpen, setAcceptModalIsOpen] = useState(false); // 작업검토완료 모달
+    const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false); // 보수지급완료 모달
     const [modalTitle, setModalTitle] = useState('');
     const [applyWorkID, setApplyWorkID] = useState('');
     const [registeredList, setRegisteredList] = useState([]); //work status 0(작업 진행전)의 작업 목록
@@ -95,7 +98,32 @@ const ManageScreen = () => {
                     window.location.reload();
                 }
                 setRequestModalIsOpen(false);
+            } else {
+                const result = await putLookOverAccept(applyWorkID);
+                if (result) {
+                    alert(`작업: ${modalTitle}\n작업 검토가 완료되었습니다.`);
+                    window.location.reload();
+                } else {
+                    alert(`작업: ${modalTitle}\n작업 검토 완료 중 오류가 발생했습니다.\n해당 탭을 닫고 다시 시도해주세요.`);
+                    window.location.reload();
+                }
+                setAcceptModalIsOpen(false);
             }
+            setIsSubmit(false);
+        }        
+    }
+    const handleRejectWorkingItem = async () => {
+        if (!isSubmit) {
+            setIsSubmit(true);
+            const result = await putLookOverReject(applyWorkID);
+            if (result) {
+                alert(`작업: ${modalTitle}\n작업 완료 신청이 거절되었습니다.`);
+                window.location.reload();
+            } else {
+                alert(`작업: ${modalTitle}\n신청 거절 중 오류가 발생했습니다.\n해당 탭을 닫고 다시 시도해주세요.`);
+                window.location.reload();
+            }
+            setAcceptModalIsOpen(false);
             setIsSubmit(false);
         }        
     }
@@ -106,9 +134,33 @@ const ManageScreen = () => {
             setModalTitle(title);
             if (userId==="employee1234") {
                 setRequestModalIsOpen(true);
+            } else {
+                setAcceptModalIsOpen(true);
             }
             setIsSubmit(false);
         } 
+    }
+    const handlePayment = async (workID, title) => {
+        if (!isSubmit) {
+            setIsSubmit(true);
+            setModalTitle(title);
+            const result = await putPayment(workID);
+            if (result) {
+                setPaymentModalIsOpen(true);
+            } else {
+                alert(`작업: ${modalTitle}\n보수 지급 중 오류가 발생했습니다.\n해당 탭을 닫고 다시 시도해주세요.`);
+                window.location.reload();
+            }
+            setIsSubmit(false);
+        }
+    }
+    const handleClosePaymentModal = () => {
+        if (!isSubmit) {
+            setIsSubmit(true);
+            setPaymentModalIsOpen(false);
+            window.location.reload();
+            setIsSubmit(false);
+        }
     }
     useEffect(() => {
         const id = sessionStorage.getItem('id');
@@ -132,6 +184,7 @@ const ManageScreen = () => {
                 setWorkedList(result.filter(item => item.workStatus === 2)); // Employee가 검토 승인 받고 보수 지급버튼을 눌러야하는 일거리 사용O. 3. 
                 setRequesetList(result.filter(item => item.workStatus === 3)); // Employee가 지원한 일거리 사용O. 1. 
                 setCompletedList(result.filter(item => item.workStatus === 5)); // Employee가 완료한 일거리 사용O. 4. 
+                console.log(workedList);
             } else {
                 alert('등록된 일거리 목록을 불러오지 못했습니다.\n해당 탭을 닫은 후 다시 시도해주세요.');
             }
@@ -163,7 +216,7 @@ const ManageScreen = () => {
                                     pay={item.pay}
                                     dueDate={searchDueDate(item.dueDate)} 
                                     categoryName={searchCategoryName(item.category)}
-                                    nickName={'김철수'}
+                                    nickName={'노동자'}
                                     rejectHandler={() => handleRejectButton(item.workID, item.title)}
                                     acceptHandler={() => handleAcceptButton(item.workID, item.title)}
                                 />                        
@@ -187,7 +240,7 @@ const ManageScreen = () => {
                                     pay={item.pay}
                                     dueDate={searchDueDate(item.dueDate)} 
                                     categoryName={searchCategoryName(item.category)}
-                                    nickName={'김철수'}
+                                    nickName={'노동자'}
                                 />                        
                             )
                         })}
@@ -209,7 +262,7 @@ const ManageScreen = () => {
                                     pay={item.pay}
                                     dueDate={searchDueDate(item.dueDate)} 
                                     categoryName={searchCategoryName(item.category)}
-                                    nickName={'김철수'}
+                                    nickName={'노동자'}
                                 />                        
                             )
                         })}
@@ -229,22 +282,25 @@ const ManageScreen = () => {
                                     ? item.workStatus === 1
                                         ? false
                                         : true
-                                    : false
+                                    : item.workStatus === 1
+                                        ? true
+                                        : false
                                 }
                                 title={item.title}
                                 description={item.description}
                                 pay={item.pay}
                                 dueDate={searchDueDate(item.dueDate)} 
                                 categoryName={searchCategoryName(item.category)}
-                                nickName={'김철수'}
-                                //onClick 1.Employer: 작업 검토 완료 API 2. Employee: 작업 검토 신청 API
+                                nickName={'노동자'}
                                 onClick={() => handleLookOverModal(item.workID, item.title)}
                                 button={
                                     userId === "employee1234" 
                                     ? item.workStatus === 1
                                         ? "작업 완료"
                                         : "검토중"
-                                    : "검토 완료"
+                                    : item.workStatus === 1
+                                        ? "진행중"
+                                        : "검토 완료"
                                 }
                             />                        
                         )
@@ -264,8 +320,13 @@ const ManageScreen = () => {
                                 pay={item.pay}
                                 dueDate={searchDueDate(item.dueDate)} 
                                 categoryName={searchCategoryName(item.category)}
-                                nickName={'김철수'}
-                                onClick={() => alert('작업 검토 완료 API 연결하고 WorkListItem 디자인 변경하기')}
+                                nickName={'노동자'}
+                                onClick={() => handlePayment(item.workID, item.title)}
+                                button={
+                                    userId === "employee1234"
+                                    ? "보수 지급"
+                                    : null
+                                }
                             />                        
                         )
                     })}
@@ -284,7 +345,7 @@ const ManageScreen = () => {
                                 pay={item.pay}
                                 dueDate={searchDueDate(item.dueDate)} 
                                 categoryName={searchCategoryName(item.category)}
-                                nickName={'김철수'}
+                                nickName={'노동자'}
                                 onClick={() => alert('작업 검토 완료 API 연결하고 WorkListItem 디자인 변경하기')}
                             />                        
                         )
@@ -295,7 +356,7 @@ const ManageScreen = () => {
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}
                 title={modalTitle}
-                subtitle={`에 대한 김철수님 지원을 수락하시겠습니까?`}
+                subtitle={`에 대한 노동자님 지원을 수락하시겠습니까?`}
                 description="수락시 보수 지급을 위한 결제가 진행됩니다."
                 acceptText="수락"
                 cancleHandler={() => setModalIsOpen(false)}
@@ -310,6 +371,27 @@ const ManageScreen = () => {
                 acceptText="신청"
                 cancleHandler={() => setRequestModalIsOpen(false)}
                 acceptHandler={handleWorkingItem}
+            />
+            <Modal
+                isOpen={acceptModalIsOpen}
+                onRequestClose={() => setAcceptModalIsOpen(false)}
+                title={modalTitle}
+                subtitle={`에 대한 작업 검토를 완료하시겠습니까?`}
+                description={`수락 시 보수가 전달되며\n일이 종료되어 추가적인 검토는 불가합니다.`}
+                cancleText="거절"
+                acceptText="수락"
+                cancleHandler={handleRejectWorkingItem}
+                acceptHandler={handleWorkingItem}
+            />
+            <Modal
+                isOpen={paymentModalIsOpen}
+                onRequestClose={() => setPaymentModalIsOpen(false)}
+                title={modalTitle}
+                subtitle={`보수 지급이 완료되었습니다.`}
+                description={`티끌 서비스를 이용해주셔서 감사합니다!\n문의: hk7417@ajou.ac.kr`}
+                isCancleText={false}
+                acceptText="확인"
+                acceptHandler={handleClosePaymentModal}
             />
         </Template>
     );

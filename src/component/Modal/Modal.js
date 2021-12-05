@@ -2,7 +2,7 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
 
-const Modal = ({ isOpen, onRequestClose, title='', subtitle='', description='', cancleText='취소', acceptText='수락', cancleHandler, acceptHandler }) => {
+const Modal = ({ isOpen, onRequestClose, title='', subtitle='', description='', isCancleText=true, cancleText='취소', acceptText='수락', cancleHandler, acceptHandler }) => {
     return (
       <ReactModal
         isOpen={isOpen}
@@ -18,7 +18,10 @@ const Modal = ({ isOpen, onRequestClose, title='', subtitle='', description='', 
                 {description}
             </DescriptionSection>
             <ButtonSection>
-                <CancleButton onClick={cancleHandler}>{cancleText}</CancleButton>
+                {
+                    isCancleText && 
+                    <CancleButton onClick={cancleHandler}>{cancleText}</CancleButton>
+                }
                 <AcceptButton onClick={acceptHandler}>{acceptText}</AcceptButton>
             </ButtonSection>
         </ModalContent>
