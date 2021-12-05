@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import Template from '../component/Template';
 import { actionCreators as userAction } from "../redux/modules/users";
 import WorkTemplate from '../component/WorkTemplate';

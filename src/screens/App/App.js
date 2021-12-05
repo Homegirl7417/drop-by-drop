@@ -5,16 +5,12 @@ import HomeScreen from '../HomeScreen';
 import ManageScreen from '../ManageScreen';
 import RegisterScreen from '../RegisterScreen';
 import LoginScreen from '../LoginScreen';
-import NotFoundScreen from '../NotFoundScreen';
-
 
 const App = () => {
     return (
         <Container>
             <GlobalStyle/>
             <Routes>
-                {/* <Route path='*' element={<NotFoundScreen/>} /> */}
-                {/* <Route exact path='/' element={<HomeScreen/>} /> */}
                 <Route path='*' element={<HomeScreen/>} />
                 <Route exact path='/register/work' element={<RegisterScreen/>} />
                 <Route exact path='/manage/work' element={<ManageScreen/>} />

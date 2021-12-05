@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const WorkTemplate = ({isRegisterForm = false, title, children, isBorder=true, isLoggedIn=false, userId=''}) => {
+const WorkTemplate = ({ isRegisterForm = false, title, children, isBorder=true }) => {
     return (
         <Container>
             <Title>
