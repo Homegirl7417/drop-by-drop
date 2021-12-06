@@ -1,6 +1,6 @@
 import api from './';
 
-export default async function getAllWorkList(workID) {
+export default async function getCheckList(workID) {
     try {
         return await getApi(workID);
     } catch(err) {

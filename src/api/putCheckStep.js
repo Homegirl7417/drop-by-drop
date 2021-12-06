@@ -1,6 +1,6 @@
 import api from './';
 
-export default async function postRequestWork(stepID) {
+export default async function putCheckStep(stepID) {
     try {
         return await putApi(stepID);
     } catch(err) {

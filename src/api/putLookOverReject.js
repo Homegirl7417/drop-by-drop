@@ -1,6 +1,6 @@
 import api from './';
 
-export default async function putLookOverRequest(workID) {
+export default async function putLookOverReject(workID) {
     try {
         return await putApi(workID);
     } catch(err) {
