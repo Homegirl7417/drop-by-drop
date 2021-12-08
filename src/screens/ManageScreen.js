@@ -302,6 +302,7 @@ const ManageScreen = () => {
                                     dueDate={searchDueDate(item.dueDate)} 
                                     categoryName={searchCategoryName(item.category)}
                                     nickName={'노동자'}
+                                    checkList={item.checklist}
                                 />                        
                             )
                         })}
